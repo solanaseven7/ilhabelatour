@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blog Ilhabela Tour: dicas e roteiros de passeios em Ilhabela</title>
+<meta name="description" content="Dicas e roteiros para Ilhabela: Castelhanos de barco ou de jipe, temporada de baleias e como chegar à Praia do Bonete."/>
+<meta property="og:type" content="website"/><meta property="og:site_name" content="Ilhabela Tour"/>
+<meta property="og:title" content="Blog Ilhabela Tour"/><meta property="og:description" content="Dicas e roteiros de passeios em Ilhabela."/>
+<link rel="icon" type="image/png" sizes="32x32" href="img/site/5fdde15053.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="img/site/f3753b7688.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--off:#F4F1EA;--creme:#EFE7D8;--navy:#1B2A3A;--verde:#3B5343;--laranja:#E07A5F;--sol:#F2A154;--mar:#1C6695;--mar-claro:#42AAD1}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--navy)}
+.topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:14px 28px;border-bottom:1px solid #E9E4D8;background:var(--off)}
+.brand-mark{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand-logo{width:40px;height:40px;border-radius:9px;display:block}
+.brand-name{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--navy);letter-spacing:-.4px}
+.topnav{display:flex;gap:26px}
+.topnav a{font-size:14px;font-weight:500;color:#5a5a56;text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
+.topnav a:hover,.topnav a.on{color:var(--navy);border-bottom-color:var(--mar)}
+.blog-hero{background:linear-gradient(180deg,#F8E3C4 0%,#F6C98E 55%,#F2A154 100%);padding:48px 24px 40px;text-align:center}
+.blog-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:800;letter-spacing:-.4px}
+.blog-hero p{margin-top:8px;font-size:15px;color:#3a3f47}
+.indice{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+.indice a{background:rgba(255,255,255,.88);color:var(--navy);text-decoration:none;font-size:13px;font-weight:600;border-radius:20px;padding:7px 14px}
+.indice a:hover{background:#fff}
+main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
+.post{background:#fff;border:1px solid #E6DDCB;border-radius:16px;margin-bottom:26px;overflow:hidden;scroll-margin-top:20px;box-shadow:0 6px 18px rgba(27,42,58,.05)}
+.post-topo{display:grid;grid-template-columns:400px 1fr;gap:34px;align-items:center;padding:20px 30px 20px 20px}
+.post-capa{position:relative;aspect-ratio:420/236;border-radius:12px;overflow:hidden}
+.post-capa svg,.post-capa img{width:100%;height:100%;display:block;object-fit:cover}
+.blog-tag{position:absolute;top:12px;left:12px;background:#fff;color:var(--navy);font-size:11px;font-weight:700;border-radius:20px;padding:4px 10px}
+.post h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;margin:0 0 10px;letter-spacing:-.3px;text-align:left}
+.post-intro{font-size:15px;color:#4A4F57;line-height:1.7;margin:0 0 16px;text-align:left}
+.post-toggle{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;background:var(--laranja);color:#fff;font-family:inherit;font-weight:700;font-size:14px;border-radius:10px;padding:10px 16px}
+.post-toggle:hover{filter:brightness(.95)}
+.post-toggle svg{transition:transform .25s}
+.post-toggle .t-fechar{display:none}
+.post.aberto .post-toggle{background:var(--navy)}
+.post.aberto .post-toggle .t-abrir{display:none}
+.post.aberto .post-toggle .t-fechar{display:inline}
+.post.aberto .post-toggle svg{transform:rotate(180deg)}
+.post-exp{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.post.aberto .post-exp{grid-template-rows:1fr}
+.post-exp-in{overflow:hidden}
+.post.aberto .post-exp-in{border-top:1px solid #EFEAE0}
+.post-corpo{margin:24px 30px 0;font-size:15px;line-height:1.75;color:#2E343C;text-align:left}
+.post-corpo p{margin-bottom:14px}
+.post-corpo h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin:22px 0 8px;color:var(--navy)}
+.post-corpo ul{margin:0 0 14px 20px}
+.post-corpo li{margin-bottom:6px}
+.post-fontes{margin:18px 30px 0;font-size:12.5px;color:#8E8A80}
+.post-fontes a{color:var(--mar)}
+.post-voltar{display:inline-block;margin:18px 30px 28px;background:var(--laranja);color:#fff;text-decoration:none;font-weight:700;font-size:14px;border-radius:10px;padding:11px 18px}
+.post-voltar:hover{filter:brightness(.95)}
+.footer{background:var(--navy);color:#D9D3C6;padding:30px 28px 22px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;max-width:1400px;margin:0 auto}
+.footer-marca{display:flex;align-items:center;gap:12px}
+.footer-nome{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--off)}
+.footer-desc{font-size:12px;color:#A9B3BD}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer a{color:#D9D3C6;font-size:13px;text-decoration:none}
+.footer a:hover{color:var(--sol)}
+.footer-base{max-width:1400px;margin:18px auto 0;padding-top:14px;border-top:1px solid rgba(244,241,234,.12);font-size:11.5px;color:#8E99A4}
+@media(max-width:640px){
+  .topbar{display:flex;flex-wrap:wrap;justify-content:space-between;padding:12px 16px}
+  .topnav{order:3;width:100%;justify-content:center;gap:16px}
+  .blog-hero h1{font-size:26px}
+  main{padding:28px 16px 60px}
+  .post-topo{grid-template-columns:1fr;gap:16px;padding:14px 14px 20px}
+  .post h2{font-size:21px}
+  .post-corpo,.post-fontes,.post-voltar{margin-left:18px;margin-right:18px}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+}
+</style>
+<link rel="canonical" href="https://ilhabelatour.com/blog.html"/>
+<meta property="og:url" content="https://ilhabelatour.com/blog.html"/>
+<meta property="og:image" content="https://ilhabelatour.com/img/og.jpg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:image" content="https://ilhabelatour.com/img/og.jpg"/>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand-mark" href="./"><img class="brand-logo" src="img/site/f77f6875c5.png" alt="Ilhabela Tour"/><span class="brand-name">Ilhabela Tour</span></a>
+  <nav class="topnav"><a href="./#sobre">Sobre</a><a href="./#mapa">Mapa</a><a class="on" href="blog.html">Blog</a><a href="./#contato">Contato</a></nav>
+  <span></span>
+</header>
+<section class="blog-hero">
+  <h1>Blog Ilhabela Tour</h1>
+  <p>Dicas e roteiros para aproveitar Ilhabela ao máximo.</p>
+  <nav class="indice"><a href="#castelhanos-barco-ou-jipe">Castelhanos: ir de barco ou de jipe?</a><a href="#temporada-de-baleias-ilhabela">Temporada de baleias em Ilhabela</a><a href="#praia-do-bonete-como-chegar">Praia do Bonete: como chegar</a></nav>
+</section>
+<main>
+  <article class="post" id="castelhanos-barco-ou-jipe">
+    <div class="post-topo">
+      <div class="post-capa"><img src="img/site/c31aa861f0.jpg" alt="Praia vista do mirante, com barcos ancorados" loading="lazy" decoding="async"/><span class="blog-tag">Roteiros</span></div>
+      <div class="post-resumo">
+        <h2>Castelhanos: ir de barco ou de jipe?</h2>
+        <p class="post-intro">São cerca de 22 km de estrada de terra pelo Parque Estadual ou a travessia pelo mar. Veja o que muda em cada opção, o que você encontra no caminho e como escolher o passeio certo para o seu dia.</p>
+        <button class="post-toggle" type="button" aria-expanded="false" aria-controls="corpo-castelhanos-barco-ou-jipe"><span class="t-abrir">Ler artigo</span><span class="t-fechar">Fechar artigo</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="post-exp" id="corpo-castelhanos-barco-ou-jipe">
+      <div class="post-exp-in">
+        <div class="post-corpo"><p>A Praia de Castelhanos fica no lado leste de Ilhabela, voltada para o mar aberto, e é um dos destinos mais procurados da ilha. Sua baía tem o famoso formato de coração, visível do Mirante do Coração. Tem 1,7 km de areia, mar com ondas fortes (muito buscado por surfistas), cantos mais protegidos e uma comunidade caiçara tradicional.</p>
+<h3>Por terra: a estrada de Castelhanos</h3>
+<p>O acesso por terra é feito por cerca de 22 km de estrada de terra dentro do Parque Estadual de Ilhabela, com subidas, mata fechada e mirantes pelo caminho. Apenas veículos 4x4 podem passar: carros comuns não são permitidos. Há horário de entrada (7h às 14h) e de retorno (15h às 18h), além de limite diário de veículos particulares. Por isso, o passeio de jipe com um operador local é a forma mais prática de ir.</p>
+<ul><li>Ideal para quem quer aventura, mata atlântica e cachoeiras no trajeto.</li><li>Funciona mesmo quando o mar não está bom para navegação.</li><li>Perto da praia fica a Cachoeira do Gato, com cerca de 50 m de queda.</li></ul>
+<h3>Pelo mar: a travessia de barco</h3>
+<p>A outra opção é chegar navegando, contornando a ilha e parando em praias pelo caminho. A viagem depende das condições do mar, já que Castelhanos é exposta ao oceano aberto.</p>
+<ul><li>Ideal para quem prefere conforto, paisagem pelo mar e paradas para banho.</li><li>Alguns operadores combinam as duas coisas: ida de jipe e volta de barco (ou o contrário).</li></ul>
+<h3>Como escolher</h3>
+<p>Se o mar estiver agitado, o jipe é a aposta mais segura. Se o dia estiver firme e você quiser conhecer outras praias, vá de barco. No Ilhabela Tour você filtra por <b>Marítimo</b> ou <b>Terrestre</b> e fala direto com o operador para confirmar as condições do dia.</p></div>
+        <p class="post-fontes">Fontes: <a href="https://costanorte.com.br/cidades/ilhabela/praia-de-castelhanos-em-ilhabela-como-chegar-e-o-que-fazer-na-praia-em-formato-de-coracao.html" target="_blank" rel="noopener">Costa Norte — Praia de Castelhanos: como chegar</a></p>
+        <a class="post-voltar" href="./#mapa">Encontrar passeios no Ilhabela Tour →</a>
+      </div>
+    </div>
+  </article>
+  <article class="post" id="temporada-de-baleias-ilhabela">
+    <div class="post-topo">
+      <div class="post-capa"><img src="img/site/b5b2f3b94b.jpg" alt="Baleia-jubarte saltando no mar" loading="lazy" decoding="async"/><span class="blog-tag">Natureza</span></div>
+      <div class="post-resumo">
+        <h2>Temporada de baleias em Ilhabela</h2>
+        <p class="post-intro">Todo ano as baleias-jubarte passam pelo litoral de Ilhabela, e 2025 bateu recorde de avistamentos. Saiba quando é a melhor época, como se preparar e por que escolher um operador certificado.</p>
+        <button class="post-toggle" type="button" aria-expanded="false" aria-controls="corpo-temporada-de-baleias-ilhabela"><span class="t-abrir">Ler artigo</span><span class="t-fechar">Fechar artigo</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="post-exp" id="corpo-temporada-de-baleias-ilhabela">
+      <div class="post-exp-in">
+        <div class="post-corpo"><p>As baleias-jubarte migram da Antártida para as águas mais quentes do Brasil para descansar e se reproduzir, e Ilhabela está no caminho. Segundo a Prefeitura, a temporada de avistamento de baleias e golfinhos vai de <b>maio a agosto</b>, com pico entre <b>junho e julho</b>.</p>
+<p>Em 2025, a cidade registrou <b>836 avistamentos</b>, um recorde. Para 2026, a Prefeitura prevê campanhas de conscientização, passeios monitorados com educação ambiental e capacitação de operadores, reforçando o selo <b>Ilhabela, Cidade Amiga das Baleias</b>.</p>
+<h3>Como se preparar</h3>
+<ul><li>Leve binóculos: as baleias preferem águas mais profundas, longe da costa.</li><li>Reserve tempo: quanto mais tempo no mar, maiores as chances de encontro.</li><li>O avistamento é feito apenas durante o dia.</li><li>Também dá para observar da terra, em pontos como a Passarela Caminho ao Mar, no bairro do Taubaté.</li></ul>
+<h3>Escolha um operador responsável</h3>
+<p>Prefira embarcações regularizadas, com seguro e tripulação treinada, e operadores que participam das boas práticas de observação. No Ilhabela Tour você encontra operadores que oferecem avistamento de cetáceos e fala com eles direto pelo WhatsApp.</p></div>
+        <p class="post-fontes">Fontes: <a href="https://www.ilhabela.sp.gov.br/portal/noticias/0/3/17024/ilhabela-se-prepara-para-temporada-de-baleias-2026-apos-ano-recorde/" target="_blank" rel="noopener">Prefeitura de Ilhabela — Temporada de baleias 2026</a> · <a href="https://www.ilhabela.sp.gov.br/portal/noticias/0/3/15184/descubra-como-se-preparar-para-o-avistamento-de-baleias-em-ilhabela/" target="_blank" rel="noopener">Prefeitura de Ilhabela — Como se preparar para o avistamento</a></p>
+        <a class="post-voltar" href="./#mapa">Encontrar passeios no Ilhabela Tour →</a>
+      </div>
+    </div>
+  </article>
+  <article class="post" id="praia-do-bonete-como-chegar">
+    <div class="post-topo">
+      <div class="post-capa"><img src="img/site/23ebac5a79.jpg" alt="Vista aérea de praia e costão em Ilhabela" loading="lazy" decoding="async"/><span class="blog-tag">Praias</span></div>
+      <div class="post-resumo">
+        <h2>Praia do Bonete: como chegar</h2>
+        <p class="post-intro">Uma vila caiçara sem carros, com ondas de mar aberto e cachoeiras. Chegar ao Bonete exige escolha: 12 km de trilha pela mata ou cerca de 1 hora de barco. Compare os dois caminhos.</p>
+        <button class="post-toggle" type="button" aria-expanded="false" aria-controls="corpo-praia-do-bonete-como-chegar"><span class="t-abrir">Ler artigo</span><span class="t-fechar">Fechar artigo</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="post-exp" id="corpo-praia-do-bonete-como-chegar">
+      <div class="post-exp-in">
+        <div class="post-corpo"><p>O Bonete fica no sul de Ilhabela e é uma das praias mais famosas do litoral paulista. A vila é uma comunidade caiçara tradicional, sem carros, abastecida por geradores comunitários e painéis solares. Os moradores ainda vivem da pesca, do artesanato e do turismo de base comunitária.</p>
+<h3>Pela trilha</h3>
+<ul><li>Início no bairro de Borrifos, a cerca de 40 minutos de carro da balsa.</li><li>São 12 km no total: 2 km de estrada de terra até o estacionamento e 10 km de caminhada.</li><li>Duração média de 5 horas, com nível de médio a avançado.</li><li>Três cachoeiras no caminho servem de parada para descanso.</li></ul>
+<h3>Pelo mar</h3>
+<ul><li>Cerca de 1 hora de barco, geralmente saindo da Praia do Perequê.</li><li>Há passeios coletivos, lanchas privativas e as chatinhas da comunidade.</li><li>O acesso depende do mar e do tempo: saídas pela manhã costumam ser mais tranquilas.</li><li>No caminho, o barco passa por pontos como o Buraco do Cação.</li></ul>
+<h3>O que encontrar por lá</h3>
+<p>Mar aberto com boas ondas para surf, a lagoa do Rio Nema, cachoeiras como a da Laje, do Areado e do Saquinho, e praias vizinhas como Enchovas e Indaiaúba. Leve repelente, protetor solar, calçado adequado, água e dinheiro em espécie. O sinal de celular é fraco, então aproveite para desconectar.</p>
+<p>No Ilhabela Tour, vários operadores fazem o <b>Roteiro Sul</b> até o Bonete. Filtre por <b>Sul</b> e compare as opções.</p></div>
+        <p class="post-fontes">Fontes: <a href="https://www.ilhabela.com.br/bonete/" target="_blank" rel="noopener">Ilhabela.com.br — Guia completo do Bonete</a></p>
+        <a class="post-voltar" href="./#mapa">Encontrar passeios no Ilhabela Tour →</a>
+      </div>
+    </div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-marca"><img src="img/site/f77f6875c5.png" alt="" width="44" height="44" style="border-radius:10px"/><div><div class="footer-nome">Ilhabela Tour</div><div class="footer-desc">Portal de passeios em Ilhabela</div></div></div>
+    <nav class="footer-links"><a href="./#sobre">Sobre</a><a href="./#mapa">Mapa</a><a href="blog.html">Blog</a><a href="./#contato">Contato</a><a href="https://instagram.com/ilhatourapp" target="_blank" rel="noopener">@ilhatourapp</a></nav>
+  </div>
+  <div class="footer-base">Feito em Ilhabela · SP</div>
+</footer>
+<script>
+(function(){
+  function alternar(post, abrir){
+    const on = abrir === undefined ? !post.classList.contains('aberto') : abrir;
+    post.classList.toggle('aberto', on);
+    post.querySelector('.post-toggle').setAttribute('aria-expanded', String(on));
+  }
+  document.querySelectorAll('.post-toggle').forEach(b => b.addEventListener('click', () => alternar(b.closest('.post'))));
+  function abrirHash(){
+    const id = decodeURIComponent(location.hash.slice(1));
+    const post = id && document.getElementById(id);
+    if (post && post.classList.contains('post')) { alternar(post, true); setTimeout(() => post.scrollIntoView({behavior:'smooth', block:'start'}), 60); }
+  }
+  window.addEventListener('hashchange', abrirHash);
+  abrirHash();
+})();
+</script>
+</body>
+</html>
