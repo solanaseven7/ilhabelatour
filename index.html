@@ -942,6 +942,13 @@ html.abas[data-aba="sobre"] #sobre{padding-top:24px}
   .modal.split .modal-gallery:has(.gimg:nth-child(5)){grid-template-columns:1fr 1fr}
   .modal.split .modal-gallery .gimg:nth-child(n+5){display:none}
 }
+
+/* ===== MOBILE: card com altura do conteudo (sem vazio antes dos botoes) ===== */
+@media(max-width:640px){
+  .modal-stage .modal,.modal{height:auto;max-height:calc(100vh - 176px);max-height:calc(100dvh - 176px)}
+  .modal .modal-body{flex:0 1 auto;min-height:0;padding-bottom:20px}
+  .modal.split .modal-split-row{margin-top:0;margin-bottom:0}
+}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
