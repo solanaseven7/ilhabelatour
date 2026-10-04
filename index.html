@@ -929,6 +929,19 @@ html.abas[data-aba="sobre"] #sobre{padding-top:24px}
   .modal-stage .modal,.modal{height:min(540px,calc(100vh - 176px));height:min(540px,calc(100dvh - 176px))}
   .modal-body{touch-action:pan-y}
 }
+
+/* ===== MOBILE: card dividido como no desktop — Sobre a esquerda | mosaico a direita ===== */
+@media(max-width:640px){
+  .modal.split .modal-split-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
+  .modal.split .modal-col-sobre{display:flex;flex-direction:column;min-width:0}
+  .modal.split .modal-col-sobre .modal-bio{font-size:12px;line-height:1.5}
+  .modal.split .modal-col-sobre .modal-regioes{margin-top:auto;padding-top:10px;gap:6px;flex-wrap:wrap}
+  .modal.split .modal-col-sobre .modal-regioes>*{font-size:12px;padding:5px 10px}
+  .modal.split .modal-col-fotos{position:relative;margin-top:18px;min-height:200px;min-width:0}
+  .modal.split .modal-gallery{position:absolute;inset:0;height:auto;margin:0;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;border-radius:12px;overflow:hidden}
+  .modal.split .modal-gallery:has(.gimg:nth-child(5)){grid-template-columns:1fr 1fr}
+  .modal.split .modal-gallery .gimg:nth-child(n+5){display:none}
+}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
