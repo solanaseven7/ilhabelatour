@@ -2501,7 +2501,9 @@ try {
     maxBoundsViscosity: 1.0,
     minZoom: 11
   });
-  map.fitBounds(ILHA_BOUNDS, { padding:[8,8] });
+  // no celular o mapa comeca escondido (aba Passeios): sem tamanho, fitBounds quebra
+  if (document.getElementById('map').clientWidth > 0) map.fitBounds(ILHA_BOUNDS, { padding:[8,8] });
+  else map.setView(ILHA_BOUNDS.getCenter(), 11);
   L.Popup.prototype.options.autoPanPadding = L.point(28, 28);
   // Camada de mapa: tenta vários provedores, todos sem chave de API.
   // Se um falhar, passa ao seguinte; se todos falharem, avisa em vez de ficar em branco.
