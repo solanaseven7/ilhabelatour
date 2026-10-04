@@ -946,9 +946,25 @@ html.abas[data-aba="sobre"] #sobre{padding-top:24px}
 /* ===== MOBILE: card com altura do conteudo (sem vazio antes dos botoes) ===== */
 @media(max-width:640px){
   .modal-stage .modal,.modal{height:auto;max-height:calc(100vh - 176px);max-height:calc(100dvh - 176px)}
-  .modal .modal-body{flex:0 1 auto;min-height:0;padding-bottom:20px}
+  .modal .modal-body,.modal.split .modal-body{flex:0 1 auto;min-height:0;padding-bottom:20px}
   .modal.split .modal-split-row{margin-top:0;margin-bottom:0}
 }
+
+/* ===== foto ampliada: deslizar para os lados navega entre as fotos do operador ===== */
+#foto-lightbox{padding:0}
+#foto-lightbox .lb-trilho{display:flex;width:100%;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#foto-lightbox .lb-trilho::-webkit-scrollbar{display:none}
+#foto-lightbox .lb-slide{flex:0 0 100%;height:100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;padding:56px 24px;box-sizing:border-box}
+#foto-lightbox .lb-slide img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.5);-webkit-user-select:none;user-select:none}
+#foto-lightbox .lb-pontos{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;justify-content:center;gap:8px}
+#foto-lightbox .lb-pt{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:background .2s,transform .2s}
+#foto-lightbox .lb-pt.on{background:#fff;transform:scale(1.25)}
+#foto-lightbox .lb-seta{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:30px;line-height:1;cursor:pointer}
+#foto-lightbox .lb-seta:hover{background:rgba(255,255,255,.26)}
+#foto-lightbox .lb-seta.esq{left:18px}
+#foto-lightbox .lb-seta.dir{right:18px}
+#foto-lightbox .lb-fechar{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:12px;width:42px;height:42px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:28px;line-height:1;cursor:pointer}
+@media (hover: none){#foto-lightbox .lb-seta{display:none}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
@@ -3264,7 +3280,7 @@ function abrirCard(el, modo) {
       const a = document.createElement('div');
       a.className = 'gimg';
       a.innerHTML = '<img src="' + src + '" alt="Foto ' + (i+1) + '" loading="lazy"/>';
-      a.onclick = () => abrirFoto(src);
+      a.onclick = () => abrirFoto(src, fotos, i);
       gal.appendChild(a);
     });
   } else {
@@ -3389,17 +3405,46 @@ document.getElementById('modal-rail').addEventListener('wheel', function(e) {
 }, { passive: false });
 
 // lightbox: abrir foto em tela cheia
-function abrirFoto(src) {
+function abrirFoto(src, lista, idx) {
+  lista = (lista && lista.length) ? lista : [src];
+  idx = Math.max(0, idx || 0);
   let lb = document.getElementById('foto-lightbox');
   if (!lb) {
     lb = document.createElement('div');
     lb.id = 'foto-lightbox';
-    lb.onclick = () => lb.classList.remove('open');
+    lb.addEventListener('click', e => {
+      const seta = e.target.closest('.lb-seta');
+      if (seta) { lbIr(lbAtual() + (seta.classList.contains('dir') ? 1 : -1)); return; }
+      const pt = e.target.closest('.lb-pt');
+      if (pt) { lbIr(+pt.dataset.i); return; }
+      lb.classList.remove('open');
+    });
     document.body.appendChild(lb);
   }
-  lb.innerHTML = '<img src="' + src + '" alt="Foto ampliada"/>';
+  const multi = lista.length > 1;
+  lb.innerHTML = '<div class="lb-trilho">' + lista.map((s, k) => '<div class="lb-slide"><img src="' + s + '" alt="Foto ' + (k+1) + '" draggable="false"/></div>').join('') + '</div>'
+    + (multi ? '<div class="lb-pontos">' + lista.map((_, k) => '<button type="button" class="lb-pt" data-i="' + k + '" aria-label="Foto ' + (k+1) + '"></button>').join('') + '</div>'
+      + '<button type="button" class="lb-seta esq" aria-label="Foto anterior">&#8249;</button><button type="button" class="lb-seta dir" aria-label="Próxima foto">&#8250;</button>' : '')
+    + '<button type="button" class="lb-fechar" aria-label="Fechar">&times;</button>';
   lb.classList.add('open');
+  const tr = lb.querySelector('.lb-trilho');
+  const marcar = () => { const a = lbAtual(); lb.querySelectorAll('.lb-pt').forEach((p, k) => p.classList.toggle('on', k === a)); };
+  tr.addEventListener('scroll', marcar, { passive: true });
+  tr.scrollLeft = idx * tr.clientWidth;
+  marcar();
 }
+function lbAtual() {
+  const tr = document.querySelector('#foto-lightbox .lb-trilho');
+  return tr ? Math.round(tr.scrollLeft / Math.max(1, tr.clientWidth)) : 0;
+}
+function lbIr(k) {
+  const tr = document.querySelector('#foto-lightbox .lb-trilho');
+  if (!tr) return;
+  const n = tr.children.length;
+  k = Math.max(0, Math.min(n - 1, k));
+  tr.scrollTo({ left: k * tr.clientWidth, behavior: 'smooth' });
+}
+function lbAberto() { const lb = document.getElementById('foto-lightbox'); return !!(lb && lb.classList.contains('open')); }
 
 function fecharCard() {
   if (window.rvFechar && window.rvAberto && window.rvAberto()) window.rvFechar();
@@ -3410,6 +3455,12 @@ function fecharCard() {
 }
 
 document.addEventListener('keydown', function(e) {
+  if (lbAberto()) {
+    if (e.key === 'Escape') document.getElementById('foto-lightbox').classList.remove('open');
+    else if (e.key === 'ArrowRight') lbIr(lbAtual() + 1);
+    else if (e.key === 'ArrowLeft') lbIr(lbAtual() - 1);
+    return;
+  }
   if (e.key === 'Escape') fecharCard();
 });
 
