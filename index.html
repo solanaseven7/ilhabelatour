@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){try{if(window.matchMedia('(max-width: 640px)').matches){var d=document.documentElement,h=(location.hash||'').slice(1),m={sobre:'sobre',mapa:'mapa',blog:'blog',contato:'contato'};d.classList.add('abas');d.setAttribute('data-aba',m[h]||'inicio');}}catch(e){}})();</script>
+
 <script>(function(){try{var d=document.documentElement;if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window){d.classList.add('rv-on');setTimeout(function(){if(!d.classList.contains('rv-ready'))d.classList.remove('rv-on')},8000);}}catch(e){}})();</script>
 
 <meta charset="UTF-8"/>
@@ -861,6 +863,60 @@ html.rv-on:not(.rv-ready) :is(.cards-head,.divider-row,.card-list-wrap,.map-lege
   .card-row.pressionando{background:#F6F1E7;transition:background .42s ease}
   .card-row.pressionando .card-avatar,.card-row.pressionando img{transition:transform .42s ease;transform:scale(.96)}
 }
+
+/* ===== SOBRE: silhueta de Ilhabela centralizada, maior e discreta ===== */
+.sobre-ilha{left:50%;top:50%;height:min(118%,1180px);transform:translate(-50%,-50%);opacity:.09}
+@media(max-width:640px){.sobre-ilha{top:50%;bottom:auto;height:auto;width:118%;transform:translate(-50%,-50%);opacity:.08}}
+
+/* ===== MOBILE: ficha do operador centralizada e com tamanho padrao (nao corta no iOS) ===== */
+@media(max-width:640px){
+  .modal-overlay{align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px calc(env(safe-area-inset-bottom,0px) + 12px)}
+  .modal-stage{width:100%;max-width:440px;gap:10px;flex-direction:column}
+  .modal-rail{margin:0;width:100%;height:68px;flex-shrink:0;border-radius:16px}
+  .rail-lista{align-items:center;padding:0 8px}
+  .rail-pfp{width:46px;height:46px}
+  .modal-stage .modal,.modal{width:100%;max-width:440px;height:min(560px,calc(100vh - 128px));height:min(560px,calc(100dvh - 128px));max-height:none;border-radius:22px;transform:translateY(14px) scale(.97);opacity:0;transition:transform .32s cubic-bezier(.22,.8,.3,1),opacity .24s ease}
+  .modal-overlay.open .modal{transform:none;opacity:1}
+  .modal::before{display:none}
+  .modal::after{border-radius:22px 22px 0 0}
+  .modal-rodape{padding:12px 16px 14px}
+}
+
+/* ===== MOBILE: estrutura de app (abas no rodape, uma secao por vez) ===== */
+.app-abas{display:none}
+html.abas body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+html.abas .topbar .topnav{display:none!important}
+html.abas .topbar{flex-wrap:nowrap;align-items:center;padding:10px 16px}
+html.abas .divisor{display:none}
+html.abas .footer-links{display:none}
+html.abas .app-abas{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:1600;height:calc(62px + env(safe-area-inset-bottom,0px));padding:4px 4px env(safe-area-inset-bottom,0px);background:rgba(255,255,255,.95);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-top:1px solid rgba(27,42,58,.08);box-shadow:0 -6px 24px rgba(27,42,58,.06)}
+.app-aba{appearance:none;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 11px/1 inherit;font-family:inherit;color:#8A8F95;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.app-aba .ic{width:52px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;transition:background .25s,transform .2s}
+.app-aba svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.app-aba.on{color:var(--navy)}
+.app-aba.on .ic{background:rgba(242,161,84,.24)}
+.app-aba:active .ic{transform:scale(.92)}
+/* o que aparece em cada aba */
+html.abas[data-aba="inicio"] :is(#sobre,#blog,#contato,.footer),
+html.abas[data-aba="inicio"] #mapa .col-right{display:none!important}
+html.abas[data-aba="mapa"] :is(.hero,#sobre,#blog,#contato,.footer),
+html.abas[data-aba="mapa"] #mapa .col-left{display:none!important}
+html.abas[data-aba="sobre"] :is(.hero,#mapa,#blog,#contato,.footer){display:none!important}
+html.abas[data-aba="blog"] :is(.hero,#mapa,#sobre,#contato,.footer){display:none!important}
+html.abas[data-aba="contato"] :is(.hero,#mapa,#sobre,#blog){display:none!important}
+html.abas[data-aba="mapa"] #mapa{padding-top:18px}
+html.abas .aba-titulo{display:none}
+html.abas[data-aba="mapa"] .aba-titulo{display:block;font-size:22px;font-weight:700;color:var(--navy);margin:0 0 4px;letter-spacing:-.3px}
+html.abas[data-aba="mapa"] .aba-sub{display:block;font-size:13px;color:#6b7280;margin:0 0 12px}
+html.abas .aba-sub{display:none}
+html.abas main-troca{}
+@keyframes abaEntra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+html.abas.trocou :is(.hero,#mapa,#sobre,#blog,#contato){animation:abaEntra .35s ease both}
+@media (prefers-reduced-motion: reduce){html.abas.trocou :is(.hero,#mapa,#sobre,#blog,#contato){animation:none}}
+
+html.abas[data-aba="mapa"] #map{height:max(440px,calc(100vh - 330px));height:max(440px,calc(100dvh - 330px));min-height:440px}
+html.abas .sobre-slogan{display:none}
+html.abas[data-aba="sobre"] #sobre{padding-top:24px}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
@@ -2119,6 +2175,7 @@ html.rv-on:not(.rv-ready) :is(.cards-head,.divider-row,.card-list-wrap,.map-lege
   </div><!-- /col-left -->
 
   <div class="col-right">
+    <h2 class="aba-titulo">Mapa de Ilhabela</h2><p class="aba-sub">Pontos de embarque e as 43 praias da ilha, Norte e Sul.</p>
     <div class="map-block">
       <div class="map-legend">
         <span><i class="dt dt-emb" style="border-radius:50% 50% 50% 0;transform:rotate(-45deg);width:10px;height:10px"></i> Ponto de embarque</span>
@@ -2415,11 +2472,12 @@ try {
   if (typeof L === 'undefined') throw new Error('Leaflet indisponivel');
   map = L.map('map', {
     scrollWheelZoom:false,
-    maxBounds: ILHA_BOUNDS.pad(0.05),
+    maxBounds: ILHA_BOUNDS.pad(0.35),
     maxBoundsViscosity: 1.0,
     minZoom: 11
   });
   map.fitBounds(ILHA_BOUNDS, { padding:[8,8] });
+  L.Popup.prototype.options.autoPanPadding = L.point(28, 28);
   // Camada de mapa: tenta vários provedores, todos sem chave de API.
   // Se um falhar, passa ao seguinte; se todos falharem, avisa em vez de ficar em branco.
   const PROVEDORES = [
@@ -2574,9 +2632,24 @@ function addEmbarque(e) {
     iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -14]
   });
   const m = L.marker([e.lat, e.lng], { icon }).addTo(map);
-  m.bindPopup(`<div class="pop-title" style="color:#B7791F">${e.nome}</div><div class="pop-sub">Ponto de embarque · ${e.obs}</div><div style="font-size:10px;color:#aaa;margin-top:4px">Coord.: ${e.fonte}</div>`);
+  m.bindPopup(`<div class="pop-title" style="color:#B7791F">${e.nome}</div><div class="pop-sub">Ponto de embarque · ${e.obs}</div><div style="font-size:10px;color:#aaa;margin-top:4px">Coord.: ${e.fonte}</div>`, { autoPan:false, maxWidth:240 });
+  m.on('click', () => focarPonto(m, 14));
   m.bindTooltip(e.nome, { direction:'top', offset:[0,-14] });
   embarqueMarkers.push(m);
+}
+
+
+// centraliza o ponto na area livre do mapa (desconta o painel de praias) e deixa espaco para o pop-up acima
+function focarPonto(marker, zoom) {
+  if (!map) return;
+  const Z = Math.max(zoom || 14, map.getZoom());
+  const painel = document.getElementById('praias-painel');
+  let dx = 0;
+  if (painel && !painel.classList.contains('min') && getComputedStyle(painel).position === 'absolute') dx = (painel.offsetWidth + 12) / 2;
+  const pt = map.project(marker.getLatLng(), Z).add([dx, -70]);   // marcador um pouco abaixo do centro
+  map.closePopup();
+  map.flyTo(map.unproject(pt, Z), Z, { duration: 0.9, easeLinearity: 0.25 });
+  map.once('moveend', () => marker.openPopup());
 }
 
 // voo suave ate a praia, centralizando na area visivel do mapa (descontando o painel aberto)
@@ -3115,7 +3188,8 @@ function abrirCard(el, modo) {
     fecharCard();
     if (activeRegion !== b.dataset.reg) setRegiao(b.dataset.reg);
     const m = document.getElementById('map');
-    if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (window.abasAtivas && window.abasAtivas()) window.irAba('mapa');
+    else if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
   const ig     = el.dataset.ig || '#';
   const wa     = el.dataset.wa || '#';
@@ -3398,7 +3472,7 @@ fotoAleatoriaSobre();
       card.addEventListener('click', e => {
         if (e.target.closest('.btn-ig, .btn-wa')) return;
         if (abriu) { abriu = false; return; }
-        if (e.target.closest('.card-more') && !rolandoAgora()) abrirCard(card, 'fixo');
+        if (!rolandoAgora()) abrirCard(card, 'fixo');   // toque rapido abre (segurar tambem abre)
       });
       return;
     }
@@ -3791,6 +3865,63 @@ carregarPraias();
     window.filterCards = function(){ const r = filtroOrig.apply(this, arguments); lista.scrollTop = 0; requestAnimationFrame(ajustar); return r; };
   }
   ajustar(); setTimeout(ajustar, 600); window.addEventListener('load', ajustar);
+})();
+</script>
+<nav class="app-abas" id="app-abas" aria-label="Seções"><button type="button" class="app-aba" data-aba="inicio"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span>Passeios</span></button><button type="button" class="app-aba" data-aba="mapa"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><span>Mapa</span></button><button type="button" class="app-aba" data-aba="sobre"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.5"/></svg></span><span>Sobre</span></button><button type="button" class="app-aba" data-aba="blog"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span><span>Blog</span></button><button type="button" class="app-aba" data-aba="contato"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></span><span>Contato</span></button></nav>
+<script>
+// ===== MOBILE: abas no rodape (estrutura de app) =====
+(function(){
+  const mq = window.matchMedia('(max-width: 640px)');
+  const d = document.documentElement;
+  const botoes = [...document.querySelectorAll('.app-aba')];
+  const ABAS = ['inicio','mapa','sobre','blog','contato'];
+  let mapaPronto = false;
+  window.abasAtivas = () => d.classList.contains('abas');
+  function marcar(a){ botoes.forEach(b => b.classList.toggle('on', b.dataset.aba === a)); }
+  function aoMostrarMapa(){
+    if (typeof map === 'undefined' || !map) return;
+    setTimeout(() => {
+      map.invalidateSize();
+      if (!mapaPronto && typeof ILHA_BOUNDS !== 'undefined') { map.fitBounds(ILHA_BOUNDS, { padding:[8,8] }); mapaPronto = true; }
+    }, 60);
+  }
+  window.irAba = function(a, semRolar){
+    if (!ABAS.includes(a)) a = 'inicio';
+    if (!window.abasAtivas()) {           // computador: rola ate a secao, como sempre
+      const alvo = a === 'inicio' ? document.body : document.getElementById(a);
+      if (alvo) alvo.scrollIntoView({ behavior:'smooth' });
+      return;
+    }
+    if (window.fecharCard && document.getElementById('card-modal').classList.contains('open')) fecharCard();
+    d.setAttribute('data-aba', a); marcar(a);
+    d.classList.remove('trocou'); void d.offsetWidth; d.classList.add('trocou');
+    if (!semRolar) window.scrollTo(0, 0);
+    if (a === 'mapa') aoMostrarMapa();
+    try { history.replaceState(null, '', a === 'inicio' ? location.pathname : '#' + a); } catch(_){}
+    window.dispatchEvent(new Event('scroll'));   // revela os elementos da aba
+    if (navigator.vibrate) try { navigator.vibrate(8); } catch(_){}
+  };
+  botoes.forEach(b => b.addEventListener('click', () => window.irAba(b.dataset.aba)));
+  // links internos (#sobre, #mapa...) viram troca de aba no celular
+  document.addEventListener('click', e => {
+    if (!window.abasAtivas()) return;
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const h = a.getAttribute('href').slice(1);
+    if (ABAS.includes(h) || h === '' || h === 'top') { e.preventDefault(); window.irAba(h || 'inicio'); }
+  });
+  function aplicar(){
+    if (mq.matches) {
+      d.classList.add('abas');
+      const a = d.getAttribute('data-aba') || 'inicio';
+      marcar(a); if (a === 'mapa') aoMostrarMapa();
+    } else {
+      d.classList.remove('abas');
+      if (typeof map !== 'undefined' && map) setTimeout(() => map.invalidateSize(), 60);
+    }
+  }
+  (mq.addEventListener ? mq.addEventListener('change', aplicar) : mq.addListener(aplicar));
+  aplicar();
 })();
 </script>
 </body>
