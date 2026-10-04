@@ -917,6 +917,18 @@ html.abas.trocou :is(.hero,#mapa,#sobre,#blog,#contato){animation:abaEntra .35s 
 html.abas[data-aba="mapa"] #map{height:max(440px,calc(100vh - 330px));height:max(440px,calc(100dvh - 330px));min-height:440px}
 html.abas .sobre-slogan{display:none}
 html.abas[data-aba="sobre"] #sobre{padding-top:24px}
+
+/* troca de operador deslizando para o lado */
+.modal.troca-esq .modal-body{animation:trocaEsq .26s ease}
+.modal.troca-dir .modal-body{animation:trocaDir .26s ease}
+@keyframes trocaEsq{from{opacity:.2;transform:translateX(36px)}to{opacity:1;transform:none}}
+@keyframes trocaDir{from{opacity:.2;transform:translateX(-36px)}to{opacity:1;transform:none}}
+/* iPhone: ficha + fotos de perfil mais abaixo, longe da barra do navegador */
+@media(max-width:640px){
+  .modal-overlay{align-items:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + 64px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
+  .modal-stage .modal,.modal{height:min(540px,calc(100vh - 176px));height:min(540px,calc(100dvh - 176px))}
+  .modal-body{touch-action:pan-y}
+}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
@@ -3315,6 +3327,26 @@ function railIr(i) {
 }
 
 document.getElementById('rail-up').onclick = () => railIr(railIdx - 1);
+(function(){
+  const modal = document.querySelector('#card-modal .modal');
+  if (!modal) return;
+  let x0 = 0, y0 = 0, t0 = 0, ativo = false;
+  modal.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { ativo = false; return; }
+    const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); ativo = true;
+  }, { passive: true });
+  modal.addEventListener('touchend', e => {
+    if (!ativo) return; ativo = false;
+    const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+    if (Date.now() - t0 > 700 || Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.6) return;
+    if (!document.getElementById('card-modal').classList.contains('open')) return;
+    const prox = dx < 0 ? railIdx + 1 : railIdx - 1;
+    if (prox < 0 || prox >= railCards.length) return;
+    railIr(prox);
+    modal.classList.remove('troca-esq', 'troca-dir'); void modal.offsetWidth;
+    modal.classList.add(dx < 0 ? 'troca-esq' : 'troca-dir');
+  }, { passive: true });
+})();
 document.getElementById('rail-down').onclick = () => railIr(railIdx + 1);
 
 document.addEventListener('keydown', function(e) {
@@ -3446,17 +3478,19 @@ fotoAleatoriaSobre();
   document.querySelectorAll('.card-row.expandable').forEach(card => {
     if (tactil) {
       // toque: abre ao segurar o dedo; toque rapido so abre em "Ver detalhes"
-      let tSeg = null, abriu = false, x0 = 0, y0 = 0;
+      let tSeg = null, abriu = false, x0 = 0, y0 = 0, toqueValido = false, toqueIni = 0;
       const cancelar = () => { clearTimeout(tSeg); tSeg = null; card.classList.remove('pressionando'); };
       card.addEventListener('touchstart', e => {
+        toqueValido = false;
         if (e.target.closest('.btn-ig, .btn-wa')) return;
-        abriu = false;
+        abriu = false; toqueIni = Date.now();
+        // se a lista ainda estava deslizando, este toque so serve para parar a rolagem
+        toqueValido = Date.now() - ultimoScroll > 140;
         const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY;
-        if (rolandoAgora()) return;                    // toque que so trava a rolagem nao abre
+        if (!toqueValido) return;                      // toque que so trava a rolagem nao abre
         card.classList.add('pressionando');
         tSeg = setTimeout(() => {
           tSeg = null; card.classList.remove('pressionando');
-          if (rolandoAgora()) return;
           abriu = true;
           if (navigator.vibrate) try { navigator.vibrate(10); } catch(_){}
           abrirCard(card, 'fixo');
@@ -3464,15 +3498,22 @@ fotoAleatoriaSobre();
       }, { passive: true });
       card.addEventListener('touchmove', e => {
         const t = e.touches[0];
-        if (Math.abs(t.clientX - x0) > 8 || Math.abs(t.clientY - y0) > 8) cancelar();
+        if (Math.abs(t.clientX - x0) > 8 || Math.abs(t.clientY - y0) > 8) { cancelar(); toqueValido = false; }
       }, { passive: true });
-      card.addEventListener('touchend', cancelar, { passive: true });
+      card.addEventListener('touchend', e => {
+        const longo = abriu;
+        cancelar();
+        if (longo || !toqueValido || e.target.closest('.btn-ig, .btn-wa')) return;
+        if (Date.now() - toqueIni > 600) return;
+        abriu = true;                                   // ignora o "click" que o navegador manda depois
+        abrirCard(card, 'fixo');
+      }, { passive: true });
       card.addEventListener('touchcancel', cancelar, { passive: true });
       card.addEventListener('contextmenu', e => e.preventDefault());
       card.addEventListener('click', e => {
         if (e.target.closest('.btn-ig, .btn-wa')) return;
         if (abriu) { abriu = false; return; }
-        if (!rolandoAgora()) abrirCard(card, 'fixo');   // toque rapido abre (segurar tambem abre)
+        abrirCard(card, 'fixo');                        // teclado/acessibilidade: clique sem toque
       });
       return;
     }
