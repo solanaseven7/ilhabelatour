@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){try{if(window.matchMedia('(max-width: 640px)').matches){var d=document.documentElement,h=(location.hash||'').slice(1),m={sobre:'sobre',mapa:'mapa',blog:'blog',contato:'contato'};d.classList.add('abas');d.setAttribute('data-aba',m[h]||'inicio');}}catch(e){}})();</script>
+<script>(function(){try{if(window.matchMedia('(max-width: 640px)').matches||Math.min(screen.width,screen.height)<=640&&window.matchMedia('(hover: none)').matches){var d=document.documentElement,h=(location.hash||'').slice(1),m={sobre:'sobre',mapa:'mapa',blog:'blog',contato:'contato'};d.classList.add('abas');d.setAttribute('data-aba',m[h]||'inicio');}}catch(e){}})();</script>
 
 <script>(function(){try{var d=document.documentElement;if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window){d.classList.add('rv-on');setTimeout(function(){if(!d.classList.contains('rv-ready'))d.classList.remove('rv-on')},8000);}}catch(e){}})();</script>
 
@@ -3954,7 +3954,8 @@ carregarPraias();
   function aplicar(){
     if (mq.matches) {
       d.classList.add('abas');
-      const a = d.getAttribute('data-aba') || 'inicio';
+      let a = d.getAttribute('data-aba');
+      if (!ABAS.includes(a)) { const h = (location.hash || '').slice(1); a = ABAS.includes(h) ? h : 'inicio'; d.setAttribute('data-aba', a); }
       marcar(a); if (a === 'mapa') aoMostrarMapa();
     } else {
       d.classList.remove('abas');
