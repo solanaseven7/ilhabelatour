@@ -1068,6 +1068,13 @@ html.abas[data-aba="contato"] body{display:flex;flex-direction:column;min-height
 html.abas[data-aba="contato"] body{padding-bottom:0}
 html.abas[data-aba="contato"] body > .contato-section{flex:1 0 auto}
 html.abas[data-aba="contato"] body > .footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+
+/* ===== Sobre: video sempre visivel no celular (iOS) ===== */
+.sobre-video{background:#1C6695 url(img/site/dfd5c96719.jpg) center/cover no-repeat}
+@media(max-width:640px){
+  .sobre-vazio.sobre-video{display:block;width:100%;min-height:0;height:auto;aspect-ratio:16/9}
+  @supports not (aspect-ratio:1/1){ .sobre-vazio.sobre-video{height:0;padding-top:56.25%} }
+}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
@@ -2373,7 +2380,7 @@ html.abas[data-aba="contato"] body > .footer{padding-bottom:calc(84px + env(safe
   <div class="sobre-layout">
 
     <div class="sobre-vazio sobre-video">
-      <video autoplay muted loop playsinline preload="auto" aria-label="Vista aérea de Ilhabela" poster="img/site/dfd5c96719.jpg">
+      <video autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" aria-label="Vista aérea de Ilhabela" poster="img/site/dfd5c96719.jpg">
         <source src="video/sobre.mp4" type='video/mp4; codecs="avc1.64001F"'/>
         <source src="video/sobre.webm" type='video/webm; codecs="vp9"'/>
       </video>
@@ -3972,6 +3979,16 @@ carregarPraias();
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? tocar() : v.pause()), { threshold: .15 }).observe(v);
   }
+  // celular: a secao Sobre comeca escondida (abas); ao abrir a aba, carrega e toca o video
+  const d = document.documentElement;
+  const naAba = () => d.getAttribute('data-aba') === 'sobre';
+  const abrirAba = () => { if (!naAba()) return; if (v.readyState === 0 && v.networkState !== 2) { try { v.load(); } catch(_){} } tocar(); };
+  new MutationObserver(abrirAba).observe(d, { attributes: true, attributeFilter: ['data-aba'] });
+  abrirAba();
+  // iOS em modo pouca energia bloqueia o autoplay: o primeiro toque na tela libera o video
+  const destravar = () => { if (v.paused) tocar(); };
+  ['touchstart', 'click'].forEach(t => document.addEventListener(t, destravar, { passive: true, once: true }));
+  v.addEventListener('click', destravar);
 })();
 (function(){ const a=document.querySelector('.brand-logo'), b=document.querySelector('.footer-logo'); if(a&&b) b.src=a.src; })();
 </script>
