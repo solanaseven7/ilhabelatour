@@ -1062,6 +1062,12 @@ html.abas .bf{display:block}
 .bf .post-fontes a{color:var(--mar);word-break:break-word}
 .bf .post-voltar{display:inline-block;margin:16px 16px 24px;background:var(--laranja);color:#fff;text-decoration:none;font-weight:700;font-size:14px;border-radius:10px;padding:11px 18px}
 .bf-carregando{padding:40px 16px;text-align:center;color:#8a8a84;font-size:14px}
+
+/* ===== Celular, aba Contato: rodape (montanha + logo + Feito em Ilhabela) sempre colado no fundo ===== */
+html.abas[data-aba="contato"] body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+html.abas[data-aba="contato"] body{padding-bottom:0}
+html.abas[data-aba="contato"] body > .contato-section{flex:1 0 auto}
+html.abas[data-aba="contato"] body > .footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
@@ -4243,7 +4249,7 @@ carregarPraias();
     silencio++; lista.scrollTo({ left: 0 }); setTimeout(() => { silencio = Math.max(0, silencio - 1); }, 300);
   }
   window.praiasSync = { montar, ir, filtrar, destacar: (p, h) => destacar(p, h), mobile: () => mqMob.matches && !!lista && lista.offsetParent !== null };
-  if (typeof markers !== 'undefined' && markers.length) montar(markers.filter(m => m.regiao === 'norte' || m.regiao === 'sul'));
+  try { if (typeof markers !== 'undefined' && markers.length) montar(markers.filter(m => m.regiao === 'norte' || m.regiao === 'sul')); } catch (_) {}
 })();
 </script>
 
