@@ -1,6 +1,6 @@
 /* Ilhabela Tour — métricas do site (visitas e cliques de Instagram/WhatsApp por operador).
    Os eventos vão para o Google Apps Script ligado à planilha "Ilha Tour Data". */
-window.METRICAS_URL = 'https://script.google.com/macros/s/AKfycbx8zYJf3uQHP_tf24ExRes9f8oAXdKVZNtu3tixpfSYudeRy-atoDPaW36rvGO6biZTMg/exec';   // URL do App da Web (termina em /exec)
+window.METRICAS_URL = 'https://script.google.com/macros/s/AKfycbyASOL0zy6tcdzIL_PnpvGUBoiuTgbtNL0UPzZtTefChbxKyc6515vj9rP7Sw7iMQpOKw/exec';   // URL do App da Web (termina em /exec)
 
 (function () {
   var ENDPOINT = window.METRICAS_URL;
