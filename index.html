@@ -976,6 +976,7 @@ html.abas[data-aba="sobre"] #sobre{padding-top:24px}
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta name="twitter:image" content="https://ilhabelatour.com/img/og.jpg"/>
+<script src="metricas.js" defer></script>
 </head>
 <body>
 <noscript><div style="background:#E07A5F;color:#fff;padding:12px 16px;font:600 14px/1.4 sans-serif;text-align:center">Este site precisa de JavaScript. No iPhone, abra o link no Safari (não pela pré-visualização de arquivos).</div></noscript>
@@ -3223,6 +3224,7 @@ const GALERIAS = {
 
 
 function abrirCard(el, modo) {
+  window.__itCard = el;
   const nome   = el.dataset.name || '';
   const handle = el.dataset.handle || '';
   const bio    = el.dataset.bio || '';
@@ -3765,8 +3767,9 @@ carregarPraias();
   function aberto(){ return ov.classList.contains('open') || (stage && stage.classList.contains('com-rv')); }
   window.rvAberto = aberto;
 
-  function abrir(num, op){
-    numero = num; operador = op || 'o operador';
+  let operadorCat = '';
+  function abrir(num, op, cat){
+    numero = num; operador = op || 'o operador'; operadorCat = cat || '';
     document.getElementById('rv-operador').textContent = operador;
     atualizar();
     clearTimeout(tVolta);
@@ -3798,10 +3801,11 @@ carregarPraias();
     if (!(stage && stage.classList.contains('com-rv'))) return;
     const m = (el.dataset.wa || '').match(/wa\.me\/(\d+)/);
     if (!m) { fechar(); return; }
-    numero = m[1]; operador = el.dataset.name || operador;
+    numero = m[1]; operador = el.dataset.name || operador; operadorCat = el.dataset.cat || operadorCat;
     document.getElementById('rv-operador').textContent = operador;
   };
   function enviar(texto){
+    if (window.itMetrica) window.itMetrica('wa', operador, operadorCat);
     window.open('https://wa.me/' + numero + '?text=' + encodeURIComponent(texto), '_blank', 'noopener');
     fechar();
   }
@@ -3817,11 +3821,11 @@ carregarPraias();
     const m = (a.getAttribute('href') || '').match(/wa\.me\/(\d+)/);
     if (!m) return;                                  // sem numero: segue o comportamento normal
     e.preventDefault(); e.stopPropagation();
-    let op = '';
+    let op = '', cat = '';
     const row = a.closest('.card-row');
-    if (row) op = row.dataset.name || '';
-    else { const t = document.getElementById('modal-title'); op = t ? t.textContent : ''; }
-    abrir(m[1], op);
+    if (row) { op = row.dataset.name || ''; cat = row.dataset.cat || ''; }
+    else { const t = document.getElementById('modal-title'); op = t ? t.textContent : ''; cat = window.__itCard ? (window.__itCard.dataset.cat || '') : ''; }
+    abrir(m[1], op, cat);
   }, true);
 
   // enquanto o pop-up estiver aberto, teclado nao mexe no card/rail por tras
