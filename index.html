@@ -1022,6 +1022,46 @@ html.abas[data-aba="mapa"] .aba-sub{margin-bottom:10px}
 @media(max-width:640px){
   #sobre-title{text-align:center}
 }
+
+/* ===== Celular: a aba Blog mostra o blog completo (conteudo do blog.html), sem sair da pagina ===== */
+.bf{display:none}
+html.abas .blog-section .blog-wrap{display:none}
+html.abas .blog-section{padding:0 0 32px}
+html.abas .bf{display:block}
+.bf-hero{background:linear-gradient(180deg,#F8E3C4 0%,#F6C98E 55%,#F2A154 100%);padding:30px 16px 26px;text-align:center}
+.bf-hero h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.4px;color:var(--navy);margin:0}
+.bf-hero p{margin-top:6px;font-size:14.5px;color:#3a3f47}
+.bf-indice{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.bf-indice a{background:rgba(255,255,255,.9);color:var(--navy);text-decoration:none;font-size:13px;font-weight:600;border-radius:20px;padding:7px 13px}
+.bf-lista{padding:22px 16px 0}
+.bf .post{background:#fff;border:1px solid #E6DDCB;border-radius:16px;margin-bottom:20px;overflow:hidden;scroll-margin-top:84px;box-shadow:0 6px 18px rgba(27,42,58,.05)}
+.bf .post-topo{display:flex;flex-direction:column;gap:14px;padding:12px 12px 18px}
+.bf .post-capa{position:relative;aspect-ratio:420/236;border-radius:12px;overflow:hidden}
+.bf .post-capa img{width:100%;height:100%;display:block;object-fit:cover}
+.bf .blog-tag{position:absolute;top:10px;left:10px;background:#fff;color:var(--navy);font-size:11px;font-weight:700;border-radius:20px;padding:4px 10px}
+.bf .post-resumo{padding:0 4px}
+.bf .post h3.bf-titulo{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;margin:0 0 8px;letter-spacing:-.3px;color:var(--navy);text-align:left}
+.bf .post-intro{font-size:14.5px;color:#4A4F57;line-height:1.65;margin:0 0 14px;text-align:left}
+.bf .post-toggle{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;background:var(--laranja);color:#fff;font-family:inherit;font-weight:700;font-size:14px;border-radius:10px;padding:10px 16px}
+.bf .post-toggle svg{transition:transform .25s}
+.bf .post-toggle .t-fechar{display:none}
+.bf .post.aberto .post-toggle{background:var(--navy)}
+.bf .post.aberto .post-toggle .t-abrir{display:none}
+.bf .post.aberto .post-toggle .t-fechar{display:inline}
+.bf .post.aberto .post-toggle svg{transform:rotate(180deg)}
+.bf .post-exp{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.bf .post.aberto .post-exp{grid-template-rows:1fr}
+.bf .post-exp-in{overflow:hidden}
+.bf .post.aberto .post-exp-in{border-top:1px solid #EFEAE0}
+.bf .post-corpo{margin:20px 16px 0;font-size:15px;line-height:1.75;color:#2E343C;text-align:left}
+.bf .post-corpo p{margin:0 0 14px}
+.bf .post-corpo h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;margin:20px 0 8px;color:var(--navy)}
+.bf .post-corpo ul{margin:0 0 14px 20px;padding:0}
+.bf .post-corpo li{margin-bottom:6px}
+.bf .post-fontes{margin:16px 16px 0;font-size:12.5px;color:#8E8A80;text-align:left}
+.bf .post-fontes a{color:var(--mar);word-break:break-word}
+.bf .post-voltar{display:inline-block;margin:16px 16px 24px;background:var(--laranja);color:#fff;text-decoration:none;font-weight:700;font-size:14px;border-radius:10px;padding:11px 18px}
+.bf-carregando{padding:40px 16px;text-align:center;color:#8a8a84;font-size:14px}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
@@ -2487,6 +2527,7 @@ html.abas[data-aba="mapa"] .aba-sub{margin-bottom:10px}
 </svg></div>
 <!-- BLOG -->
 <section class="section blog-section" id="blog">
+  <div class="bf" id="blog-full"><div class="bf-carregando">Carregando artigos…</div></div>
   <div class="blog-wrap">
     <h2 class="sec-title">Blog</h2>
     <p class="blog-lead">Dicas e roteiros para aproveitar Ilhabela ao máximo.</p>
@@ -4203,6 +4244,71 @@ carregarPraias();
   }
   window.praiasSync = { montar, ir, filtrar, destacar: (p, h) => destacar(p, h), mobile: () => mqMob.matches && !!lista && lista.offsetParent !== null };
   if (typeof markers !== 'undefined' && markers.length) montar(markers.filter(m => m.regiao === 'norte' || m.regiao === 'sul'));
+})();
+</script>
+
+<script>
+// ===== Celular: aba Blog carrega os artigos completos do blog.html dentro da propria pagina =====
+(function(){
+  const box = document.getElementById('blog-full');
+  if (!box) return;
+  let pronto = null;
+  function carregar(){
+    if (pronto) return pronto;
+    pronto = fetch('blog.html').then(r => r.text()).then(html => {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const hero = doc.querySelector('.blog-hero'), main = doc.querySelector('main');
+      if (!hero || !main) throw new Error('blog');
+      main.querySelectorAll('.post h2').forEach(h => { const n = document.createElement('h3'); n.className = 'bf-titulo'; n.innerHTML = h.innerHTML; h.replaceWith(n); });
+      main.querySelectorAll('.post').forEach(p => { p.dataset.id = p.id; p.id = 'bf-' + p.id; });
+      main.querySelectorAll('.post-exp').forEach(e => { e.id = 'bf-' + e.id; });
+      main.querySelectorAll('.post-toggle').forEach(b => b.setAttribute('aria-controls', 'bf-' + b.getAttribute('aria-controls')));
+      main.querySelectorAll('a.post-voltar').forEach(a => a.setAttribute('href', '#inicio'));
+      const indice = hero.querySelector('.indice');
+      box.innerHTML = '<div class="bf-hero"><h2>' + (hero.querySelector('h1') || {}).textContent + '</h2><p>' + ((hero.querySelector('p') || {}).textContent || '') + '</p>'
+        + (indice ? '<nav class="bf-indice">' + indice.innerHTML + '</nav>' : '') + '</div><div class="bf-lista">' + main.innerHTML + '</div>';
+      box.querySelectorAll('.bf-indice a').forEach(a => a.setAttribute('data-post', a.getAttribute('href').slice(1)));
+      box.querySelectorAll('.bf-indice a').forEach(a => a.setAttribute('href', '#blog'));
+    }).catch(() => {
+      pronto = null;
+      box.innerHTML = '<div class="bf-carregando">Não foi possível carregar os artigos. <a href="blog.html">Abrir o blog</a></div>';
+    });
+    return pronto;
+  }
+  function alternar(post, abrir){
+    const on = abrir === undefined ? !post.classList.contains('aberto') : abrir;
+    post.classList.toggle('aberto', on);
+    const b = post.querySelector('.post-toggle'); if (b) b.setAttribute('aria-expanded', String(on));
+  }
+  function abrirPost(id){
+    const post = box.querySelector('.post[data-id="' + id + '"]');
+    if (!post) return;
+    alternar(post, true);
+    setTimeout(() => post.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  }
+  box.addEventListener('click', e => {
+    const t = e.target.closest('.post-toggle');
+    if (t) { alternar(t.closest('.post')); return; }
+    const ind = e.target.closest('.bf-indice a');
+    if (ind) { e.preventDefault(); e.stopPropagation(); abrirPost(ind.dataset.post); return; }
+    const volta = e.target.closest('a.post-voltar');
+    if (volta && window.irAba) { e.preventDefault(); e.stopPropagation(); window.irAba('inicio'); }
+  }, true);
+  // no celular, links para blog.html abrem a aba Blog em vez de sair da pagina
+  document.addEventListener('click', e => {
+    if (!(window.abasAtivas && window.abasAtivas())) return;
+    const a = e.target.closest('a[href^="blog.html"]');
+    if (!a) return;
+    e.preventDefault();
+    const id = (a.getAttribute('href').split('#')[1] || '');
+    window.irAba('blog');
+    carregar().then(() => { if (id) abrirPost(id); });
+  }, true);
+  // carrega quando a aba Blog e aberta (ou ja na entrada, se a pagina abriu nela)
+  const d = document.documentElement;
+  new MutationObserver(() => { if (d.getAttribute('data-aba') === 'blog') carregar(); }).observe(d, { attributes: true, attributeFilter: ['data-aba'] });
+  if (d.getAttribute('data-aba') === 'blog') carregar();
+  else if ('requestIdleCallback' in window && window.matchMedia('(max-width: 640px)').matches) requestIdleCallback(() => carregar(), { timeout: 4000 });
 })();
 </script>
 </body>
