@@ -1072,8 +1072,10 @@ html.abas[data-aba="contato"] body > .footer{padding-bottom:calc(84px + env(safe
 /* ===== Sobre: video sempre visivel no celular (iOS) ===== */
 .sobre-video{background:#1C6695 url(img/site/dfd5c96719.jpg) center/cover no-repeat}
 @media(max-width:640px){
-  .sobre-vazio.sobre-video{display:block;width:100%;min-height:0;height:auto;aspect-ratio:16/9}
-  @supports not (aspect-ratio:1/1){ .sobre-vazio.sobre-video{height:0;padding-top:56.25%} }
+  /* Safari nao aplica aspect-ratio em item de grid com video absoluto: altura fixa pela proporcao (16:9) */
+  .sobre-layout > .sobre-vazio.sobre-video{display:block;width:100%;min-height:0;height:0!important;padding-top:56.25%;aspect-ratio:auto;align-self:start;-webkit-transform:translateZ(0)}
+  .sobre-vazio.sobre-video video{border-radius:16px}
+  .rv-on .sobre-video.rv{opacity:1;transform:none;transition:none}
 }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
