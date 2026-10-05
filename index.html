@@ -1077,6 +1077,21 @@ html.abas[data-aba="contato"] body > .footer{padding-bottom:calc(84px + env(safe
   .sobre-vazio.sobre-video video{border-radius:16px}
   .rv-on .sobre-video.rv{opacity:1;transform:none;transition:none}
 }
+
+/* ===== Celular: dica de que a lista de operadores rola (mãozinha + setas animadas) ===== */
+.lista-dica{display:none}
+@media(max-width:640px){
+  .card-list-wrap{position:relative}
+  .lista-dica{display:flex;position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:1500;transform:translateX(-50%);align-items:center;gap:8px;padding:8px 14px 8px 10px;border-radius:999px;background:rgba(27,42,58,.9);color:#fff;font:600 12.5px/1 'DM Sans',sans-serif;white-space:nowrap;pointer-events:none;box-shadow:0 6px 18px rgba(27,42,58,.25);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:opacity .35s ease,transform .35s ease}
+  .lista-dica.off{opacity:0;transform:translate(-50%,10px)}
+  .lista-dica .mao{width:20px;height:20px;animation:maoSobe 1.6s ease-in-out infinite}
+  .lista-dica .setas{display:flex;flex-direction:column;align-items:center;line-height:0}
+  .lista-dica .setas svg{width:12px;height:8px;animation:setaPisca 1.2s ease-in-out infinite}
+  .lista-dica .setas svg:last-child{animation-delay:.2s;margin-top:-1px}
+}
+@keyframes maoSobe{0%,15%{transform:translateY(5px)}55%{transform:translateY(-5px)}100%{transform:translateY(5px)}}
+@keyframes setaPisca{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(2px)}}
+@media (prefers-reduced-motion: reduce){.lista-dica .mao,.lista-dica .setas svg{animation:none}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Ilhabela Tour", "inLanguage": "pt-BR", "description": "Compare mais de 80 operadores de passeios de barco, lancha e jipe em Ilhabela. Veja roteiros e praias no mapa e fale direto com o operador pelo WhatsApp."}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ilhabela Tour", "email": "contato@ilhabelatour.com.br", "sameAs": ["https://instagram.com/ilhatourapp"], "areaServed": "Ilhabela, SP, Brasil"}</script>
@@ -4334,6 +4349,55 @@ carregarPraias();
   new MutationObserver(() => { if (d.getAttribute('data-aba') === 'blog') carregar(); }).observe(d, { attributes: true, attributeFilter: ['data-aba'] });
   if (d.getAttribute('data-aba') === 'blog') carregar();
   else if ('requestIdleCallback' in window && window.matchMedia('(max-width: 640px)').matches) requestIdleCallback(() => carregar(), { timeout: 4000 });
+})();
+</script>
+
+<script>
+// ===== Celular: dica animada de rolagem na lista de operadores =====
+(function(){
+  const mq = window.matchMedia('(max-width: 640px)');
+  const lista = document.getElementById('card-list');
+  const wrap = lista && lista.closest('.card-list-wrap');
+  if (!wrap) return;
+  const L = { pt:'Deslize para ver mais', en:'Swipe to see more', es:'Desliza para ver más' };
+  const dica = document.createElement('div');
+  dica.className = 'lista-dica off';
+  dica.setAttribute('aria-hidden', 'true');
+  dica.innerHTML = '<svg class="mao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 10.5V9a1.5 1.5 0 0 1 3 0v2"/><path d="M15 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-4.6-2.2L4 15.5a1.5 1.5 0 0 1 2.3-1.9L9 16"/></svg>'
+    + '<span class="txt"></span>'
+    + '<span class="setas"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l4 4 4-4"/></svg><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l4 4 4-4"/></svg></span>';
+  wrap.appendChild(dica);
+  let usou = false, cutucou = false, naTela = false;
+  const texto = () => { dica.querySelector('.txt').textContent = L[window.pgLang] || L[document.documentElement.lang.slice(0,2)] || L.pt; };
+  function atualizar(){
+    texto();
+    const rola = mq.matches && lista.scrollHeight > lista.clientHeight + 8;
+    const noFim = lista.scrollTop + lista.clientHeight >= lista.scrollHeight - 8;
+    const abaOk = !document.documentElement.classList.contains('abas') || document.documentElement.getAttribute('data-aba') === 'inicio';
+    const modal = document.querySelector('#card-modal.open, .rv-overlay.open');
+    dica.classList.toggle('off', !rola || usou || noFim || !naTela || !abaOk || !!modal);
+  }
+  lista.addEventListener('scroll', () => { if (lista.scrollTop > 40) usou = true; atualizar(); }, { passive: true });
+  window.addEventListener('resize', atualizar);
+  // ao filtrar a lista a dica volta a aparecer
+  const f = window.filterCards;
+  if (typeof f === 'function') window.filterCards = function(){ const r = f.apply(this, arguments); usou = false; setTimeout(atualizar, 80); return r; };
+  // quando a lista aparece na tela: mostra a dica e da uma "cutucada" na rolagem
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(es => es.forEach(e => {
+      naTela = e.isIntersecting && e.intersectionRatio > 0.25;
+      atualizar();
+      if (!e.isIntersecting) return;
+      if (!cutucou && mq.matches && !usou && lista.scrollTop === 0 && lista.scrollHeight > lista.clientHeight + 8 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        cutucou = true;
+        setTimeout(() => { if (lista.scrollTop !== 0) return; lista.scrollTo({ top: 46, behavior: 'smooth' }); setTimeout(() => { lista.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(() => { usou = false; atualizar(); }, 450); }, 600); }, 900);
+      }
+    }), { threshold: [0, 0.25, 0.5] }).observe(wrap);
+  }
+  new MutationObserver(atualizar).observe(document.documentElement, { attributes: true, attributeFilter: ['data-aba'] });
+  { const m = document.getElementById('card-modal'); if (m) new MutationObserver(atualizar).observe(m, { attributes: true, attributeFilter: ['class'] });
+  }
+  setTimeout(atualizar, 700); window.addEventListener('load', atualizar);
 })();
 </script>
 </body>
