@@ -4616,6 +4616,19 @@ carregarPraias();
     if(window.aplicarPaginacao){window.pgLimite=window.PG_PASSO;window.aplicarPaginacao();}
   }
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-ord]');if(b)ordenar(b.dataset.ord);});
+  // mantém o mapa (direita) alinhado com o topo da lista de cards (esquerda)
+  function alinhar(){
+    const cr=document.querySelector('.col-right'),cl=document.querySelector('.col-left'),
+          lw=document.querySelector('.card-list-wrap'),mh=document.querySelector('.map-holder');
+    if(!cr||!cl||!lw||!mh) return;
+    cr.style.marginTop='';
+    const a=cl.getBoundingClientRect(),b=cr.getBoundingClientRect();
+    if(a.right>b.left+1) return; // colunas empilhadas (celular)
+    const dif=lw.getBoundingClientRect().top-mh.getBoundingClientRect().top;
+    if(Math.abs(dif)>1) cr.style.marginTop=(parseFloat(getComputedStyle(cr).marginTop)+dif)+'px';
+  }
+  alinhar(); window.addEventListener('resize',alinhar); window.addEventListener('load',alinhar);
+  document.addEventListener('click',e=>{if(e.target.closest('.lang button'))setTimeout(alinhar,50);});
   ordenar('mix');
 })();
 </script>
