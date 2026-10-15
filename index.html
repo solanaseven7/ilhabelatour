@@ -1198,7 +1198,7 @@ html.abas[data-aba="contato"] body > .footer{padding-bottom:calc(84px + env(safe
 <div class="ordenar" id="ordenar" role="group" aria-label="Ordenar passeios">
       <span class="ord-rot">Ordenar por</span>
       <div class="ord-seg">
-        <button type="button" class="on" data-ord="az" aria-pressed="true">A–Z</button>
+        <button type="button" data-ord="az" aria-pressed="false">A–Z</button>
         <button type="button" data-ord="ativ" aria-pressed="false">Atividade</button>
       </div>
     </div>
@@ -4607,13 +4607,16 @@ carregarPraias();
   function ordenar(modo){
     const grupo=c=>c.dataset.cat==='terra'?1:0; // barcos primeiro, jeeps depois
     const cards=[...lista.querySelectorAll(':scope > .card-row')];
-    cards.sort((a,b)=>(grupo(a)-grupo(b))||(modo==='ativ'?((+b.dataset.ativ||0)-(+a.dataset.ativ||0)):0)||az(a,b));
+    if(modo==='mix'){ // embaralha dentro de cada grupo (Fisher-Yates)
+      cards.forEach(c=>c._r=Math.random());
+      cards.sort((a,b)=>(grupo(a)-grupo(b))||(a._r-b._r));
+    } else cards.sort((a,b)=>(grupo(a)-grupo(b))||(modo==='ativ'?((+b.dataset.ativ||0)-(+a.dataset.ativ||0)):0)||az(a,b));
     cards.forEach(c=>lista.appendChild(c));
     box.querySelectorAll('button').forEach(b=>{const on=b.dataset.ord===modo;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
     if(window.aplicarPaginacao){window.pgLimite=window.PG_PASSO;window.aplicarPaginacao();}
   }
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-ord]');if(b)ordenar(b.dataset.ord);});
-  ordenar('az');
+  ordenar('mix');
 })();
 </script>
 </body>
