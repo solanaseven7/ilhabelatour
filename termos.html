@@ -16,6 +16,10 @@
   header{background:var(--navy);color:#fff;padding:20px 16px}
   header .in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
   header a{color:#fff;text-decoration:none;font-family:'Syne',sans-serif;font-weight:800;font-size:20px}
+  header .marca{display:flex;align-items:center;gap:10px}
+  header .marca{white-space:nowrap}
+  @media(max-width:480px){header .voltar{display:none}}
+  header .marca img{width:36px;height:36px;border-radius:9px;display:block}
   header .voltar{font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;opacity:.85}
   main{max-width:760px;margin:0 auto;padding:28px 16px 64px}
   h1{font-family:'Syne',sans-serif;color:var(--navy);font-size:30px;line-height:1.15;margin:8px 0 6px}
@@ -41,14 +45,14 @@
 <body>
 <header>
   <div class="in">
-    <a href="/">Ilhabela Tour</a>
+    <a class="marca" href="/"><img src="img/site/46bf7ea2f2.png" alt="Ilhabela Tour logo" width="36" height="36"/>Ilhabela Tour</a>
     <div class="dir"><a class="voltar" href="/">← Voltar ao site</a><div class="lang"><button class="on" onclick="itSetLang('pt')">PT</button><button onclick="itSetLang('en')">EN</button><button onclick="itSetLang('es')">ES</button></div></div>
   </div>
 </header>
 
 <main data-lang="pt" data-no-i18n>
   <h1>Termos de Uso e Política de Privacidade</h1>
-  <div class="atual">Última atualização: 7 de outubro de 2026</div>
+  <div class="atual">Última atualização: 22 de outubro de 2026</div>
 
   <nav class="indice">
     <a href="#termos">Termos de Uso</a>
@@ -58,7 +62,7 @@
   <h2 id="termos">Termos de Uso</h2>
 
   <h3>1. Quem somos</h3>
-  <p>O Ilhabela Tour (<a href="https://ilhabelatour.com">ilhabelatour.com</a>) é um portal de divulgação que reúne, em um só lugar, operadores independentes de passeios de barco e de jeep em Ilhabela/SP. Ao usar o site, você concorda com estes Termos.</p>
+  <p>O Ilhabela Tour (<a href="https://ilhabelatour.com">ilhabelatour.com</a>) é um portal de divulgação que reúne, em um só lugar, operadores independentes de passeios de barco e de jeep em Ilhabela/SP, mantido por Ilhabela Tour, inscrito no CNPJ 69.683.162/0001-78. Ao usar o site, você concorda com estes Termos.</p>
 
   <h3>2. Somos apenas intermediários</h3>
   <div class="destaque">
@@ -135,7 +139,7 @@
 
 <main data-lang="en" data-no-i18n>
   <h1>Terms of Use and Privacy Policy</h1>
-  <div class="atual">Last updated: 7 October 2026 · In case of any discrepancy, the Portuguese version prevails.</div>
+  <div class="atual">Last updated: 22 October 2026 · In case of any discrepancy, the Portuguese version prevails.</div>
 
   <nav class="indice">
     <a href="#termos-en">Terms of Use</a>
@@ -145,7 +149,7 @@
   <h2 id="termos-en">Terms of Use</h2>
 
   <h3>1. Who we are</h3>
-  <p>Ilhabela Tour (<a href="https://ilhabelatour.com">ilhabelatour.com</a>) is a listing portal that brings together, in one place, independent boat and jeep tour operators in Ilhabela/SP, Brazil. By using the site, you agree to these Terms.</p>
+  <p>Ilhabela Tour (<a href="https://ilhabelatour.com">ilhabelatour.com</a>) is a listing portal that brings together, in one place, independent boat and jeep tour operators in Ilhabela/SP, Brazil, run by Ilhabela Tour, registered under CNPJ (Brazilian company number) 69.683.162/0001-78. By using the site, you agree to these Terms.</p>
 
   <h3>2. We are only intermediaries</h3>
   <div class="destaque">
@@ -222,7 +226,7 @@
 
 <main data-lang="es" data-no-i18n>
   <h1>Términos de Uso y Política de Privacidad</h1>
-  <div class="atual">Última actualización: 7 de octubre de 2026 · En caso de divergencia, prevalece la versión en portugués.</div>
+  <div class="atual">Última actualización: 22 de octubre de 2026 · En caso de divergencia, prevalece la versión en portugués.</div>
 
   <nav class="indice">
     <a href="#termos-es">Términos de Uso</a>
@@ -232,7 +236,7 @@
   <h2 id="termos-es">Términos de Uso</h2>
 
   <h3>1. Quiénes somos</h3>
-  <p>Ilhabela Tour (<a href="https://ilhabelatour.com">ilhabelatour.com</a>) es un portal de divulgación que reúne, en un solo lugar, a operadores independientes de paseos en barco y en jeep en Ilhabela/SP, Brasil. Al usar el sitio, aceptas estos Términos.</p>
+  <p>Ilhabela Tour (<a href="https://ilhabelatour.com">ilhabelatour.com</a>) es un portal de divulgación que reúne, en un solo lugar, a operadores independientes de paseos en barco y en jeep en Ilhabela/SP, Brasil, administrado por Ilhabela Tour, inscrito con el CNPJ (registro de empresa en Brasil) 69.683.162/0001-78. Al usar el sitio, aceptas estos Términos.</p>
 
   <h3>2. Somos solo intermediarios</h3>
   <div class="destaque">
@@ -308,7 +312,7 @@
 </main>
 
 
-<footer>Ilhabela Tour · Feito em Ilhabela · SP</footer>
+<footer>Ilhabela Tour · CNPJ 69.683.162/0001-78 · Feito em Ilhabela · SP</footer>
 <script>
 window.addEventListener('it-lang',function(e){
   var l=e.detail, T={pt:'Termos de Uso e Política de Privacidade · Ilhabela Tour',en:'Terms of Use and Privacy Policy · Ilhabela Tour',es:'Términos de Uso y Política de Privacidad · Ilhabela Tour'};
@@ -317,6 +321,6 @@ window.addEventListener('it-lang',function(e){
   if(h==='termos'||h==='privacidade'){var el=document.getElementById(l==='pt'?h:h+'-'+l);if(el)el.scrollIntoView();}
 });
 </script>
-<script src="i18n.js?v=8" defer></script>
+<script src="i18n.js?v=9" defer></script>
 </body>
 </html>
