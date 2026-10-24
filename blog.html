@@ -29,6 +29,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--navy)}
 .indice{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
 .indice a{background:rgba(255,255,255,.88);color:var(--navy);text-decoration:none;font-size:13px;font-weight:600;border-radius:20px;padding:7px 14px}
 .indice a:hover{background:#fff}
+.indice a.on{background:var(--navy);color:#fff}
+.post.oculto{display:none}
 main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
 .post{background:#fff;border:1px solid #E6DDCB;border-radius:16px;margin-bottom:26px;overflow:hidden;scroll-margin-top:20px;box-shadow:0 6px 18px rgba(27,42,58,.05)}
 .post-topo{display:grid;grid-template-columns:400px 1fr;gap:34px;align-items:center;padding:20px 30px 20px 20px}
@@ -86,7 +88,7 @@ main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
 <meta property="og:image:height" content="630"/>
 <meta name="twitter:image" content="https://ilhabelatour.com/img/og-v2.jpg"/>
 <script src="metricas.js" defer></script>
-<script src="i18n.js?v=10" defer></script>
+<script src="i18n.js?v=11" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -97,10 +99,10 @@ main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
 <section class="blog-hero">
   <h1>Blog Ilhabela Tour</h1>
   <p>Dicas e roteiros para aproveitar Ilhabela ao máximo.</p>
-  <nav class="indice"><a href="#norte-ou-sul-ilhabela">Norte ou Sul: qual lado de Ilhabela é para você?</a><a href="#borrachudos-ilhabela">Borrachudos: como se proteger em Ilhabela</a><a href="#castelhanos-barco-ou-jipe">Castelhanos: ir de barco ou de jipe?</a><a href="#temporada-de-baleias-ilhabela">Temporada de baleias em Ilhabela</a><a href="#praia-do-bonete-como-chegar">Praia do Bonete: como chegar</a></nav>
+  <nav class="indice" aria-label="Categorias"><a href="#" data-cat="" class="on">Todos</a><a href="#" data-cat="Roteiros">Roteiros</a><a href="#" data-cat="Praias">Praias</a><a href="#" data-cat="Natureza">Natureza</a><a href="#" data-cat="Dicas">Dicas</a></nav>
 </section>
 <main>
-  <article class="post" id="norte-ou-sul-ilhabela">
+  <article class="post" data-cat="Roteiros" id="norte-ou-sul-ilhabela">
     <div class="post-topo">
       <div class="post-capa"><img src="img/site/blog-norte-sul.jpg" alt="Placas de Norte e Sul em um mirante de Ilhabela" loading="lazy" decoding="async"/><span class="blog-tag">Roteiros</span></div>
       <div class="post-resumo">
@@ -128,7 +130,7 @@ main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
       </div>
     </div>
   </article>
-  <article class="post" id="borrachudos-ilhabela">
+  <article class="post" data-cat="Dicas" id="borrachudos-ilhabela">
     <div class="post-topo">
       <div class="post-capa"><img src="img/site/blog-borrachudos.jpg" alt="Mãe passando protetor no braço do filho na praia" loading="lazy" decoding="async"/><span class="blog-tag">Dicas</span></div>
       <div class="post-resumo">
@@ -152,7 +154,7 @@ main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
       </div>
     </div>
   </article>
-  <article class="post" id="castelhanos-barco-ou-jipe">
+  <article class="post" data-cat="Roteiros" id="castelhanos-barco-ou-jipe">
     <div class="post-topo">
       <div class="post-capa"><img src="img/site/c31aa861f0.jpg" alt="Praia vista do mirante, com barcos ancorados" loading="lazy" decoding="async"/><span class="blog-tag">Roteiros</span></div>
       <div class="post-resumo">
@@ -177,7 +179,7 @@ main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
       </div>
     </div>
   </article>
-  <article class="post" id="temporada-de-baleias-ilhabela">
+  <article class="post" data-cat="Natureza" id="temporada-de-baleias-ilhabela">
     <div class="post-topo">
       <div class="post-capa"><img src="img/site/b5b2f3b94b.jpg" alt="Baleia-jubarte saltando no mar" loading="lazy" decoding="async"/><span class="blog-tag">Natureza</span></div>
       <div class="post-resumo">
@@ -199,7 +201,7 @@ main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
       </div>
     </div>
   </article>
-  <article class="post" id="praia-do-bonete-como-chegar">
+  <article class="post" data-cat="Praias" id="praia-do-bonete-como-chegar">
     <div class="post-topo">
       <div class="post-capa"><img src="img/site/23ebac5a79.jpg" alt="Vista aérea de praia e costão em Ilhabela" loading="lazy" decoding="async"/><span class="blog-tag">Praias</span></div>
       <div class="post-resumo">
@@ -244,6 +246,12 @@ main{max-width:1100px;margin:0 auto;padding:40px 36px 70px}
     const post = id && document.getElementById(id);
     if (post && post.classList.contains('post')) { alternar(post, true); setTimeout(() => post.scrollIntoView({behavior:'smooth', block:'start'}), 60); }
   }
+  document.querySelectorAll('.indice a[data-cat]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    const c = a.dataset.cat;
+    document.querySelectorAll('.indice a[data-cat]').forEach(x => x.classList.toggle('on', x === a));
+    document.querySelectorAll('.post').forEach(p => p.classList.toggle('oculto', !!c && p.dataset.cat !== c));
+  }));
   window.addEventListener('hashchange', abrirHash);
   abrirHash();
 })();
