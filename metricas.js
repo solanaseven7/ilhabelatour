@@ -38,6 +38,20 @@ window.METRICAS_URL = 'https://script.google.com/macros/s/AKfycbyASOL0zy6tcdzIL_
   if (ref === location.hostname) ref = '';
   enviar({ t: 'visita', ref: ref || 'direto' });
 
+  // escaneamento de QR Code dos flyers (?utm_source=B1 ... J3): 1 por sessao, e limpa o link
+  try {
+    var qp = new URLSearchParams(location.search), qr = (qp.get('utm_source') || '').toUpperCase();
+    if (/^[BJ][1-9]$/.test(qr)) {
+      if (!sessionStorage.getItem('it_qr_' + qr)) {
+        sessionStorage.setItem('it_qr_' + qr, '1');
+        enviar({ t: 'qr', op: qr, cat: qr[0] === 'B' ? 'Barco' : 'Jeep' });
+      }
+      qp.delete('utm_source');
+      var resto = qp.toString();
+      history.replaceState(null, '', location.pathname + (resto ? '?' + resto : '') + location.hash);
+    }
+  } catch (_) {}
+
   // cliques em Instagram / WhatsApp (fase de captura: os botoes dos cards param a propagacao)
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
