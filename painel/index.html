@@ -191,6 +191,22 @@ tr.zero td.nome{font-weight:500}
       </div>
     </section>
 
+    <section class="cartao" style="margin-bottom:16px">
+      <div class="cartao-top"><h2>Escaneamentos de QR Code (flyers)</h2></div>
+      <div class="tabela-wrap">
+        <table>
+          <thead><tr>
+            <th>QR</th>
+            <th>Modelo</th>
+            <th class="num">Escaneamentos</th>
+            <th class="barra"></th>
+          </tr></thead>
+          <tbody id="corpo-qr"></tbody>
+        </table>
+      </div>
+      <p class="rodape-tab" id="rodape-qr"></p>
+    </section>
+
     <section class="cartao">
       <div class="rank-top">
         <h2>Ranking de redirecionamentos</h2>
@@ -318,6 +334,26 @@ tr.zero td.nome{font-weight:500}
       { k:'ig', nome:'Instagram', cor:'var(--s-ig)', val:d => (porDiaC[d] || {}).ig || 0 }
     ]);
     desenharRanking();
+    desenharQR();
+  }
+
+  // escaneamentos dos QR Codes dos flyers (eventos t:'qr', op = B1..J3)
+  function desenharQR(){
+    const J = janela();
+    const cont = {}; ['B1','B2','B3','J1','J2','J3'].forEach(k => cont[k] = 0);
+    DADOS.cliques.forEach(c => {
+      if (c[1] !== 'qr' || c[0] < J.ini || c[0] > J.fim) return;
+      const k = String(c[2] || '').toUpperCase(); cont[k] = (cont[k] || 0) + 1;
+    });
+    const ks = Object.keys(cont).sort(), max = Math.max(1, ...ks.map(k => cont[k]));
+    const tot = ks.reduce((s, k) => s + cont[k], 0);
+    $('corpo-qr').innerHTML = ks.map(k => '<tr class="' + (cont[k] ? '' : 'zero') + '">'
+      + '<td class="nome">' + k.replace(/[^A-Z0-9]/g, '') + '</td>'
+      + '<td><span class="tag">' + (k[0] === 'J' ? 'Jeep' : 'Barco') + '</span></td>'
+      + '<td class="num"><b>' + fmt(cont[k]) + '</b></td>'
+      + '<td class="barra"><div class="bar">' + (cont[k] ? '<span style="width:' + (cont[k] / max * 100) + '%;background:var(--s-visitas)"></span>' : '') + '</div></td>'
+      + '</tr>').join('');
+    $('rodape-qr').textContent = fmt(tot) + ' escaneamentos no período (1 por visitante, por QR).';
   }
 
   function escalaMax(m){ if (m <= 4) return 4; const p = Math.pow(10, Math.floor(Math.log10(m))); for (const f of [1,2,2.5,5,10]) if (f * p >= m) return f * p; return 10 * p; }
@@ -378,7 +414,7 @@ tr.zero td.nome{font-weight:500}
     const chave = (op, c) => op + '|' + c;
     OPERADORES.forEach(o => mapa[chave(o.op, o.cat)] = { op:o.op, cat:o.cat, wa:0, ig:0 });
     DADOS.cliques.forEach(c => {
-      if (c[0] < J.ini || c[0] > J.fim) return;
+      if (c[0] < J.ini || c[0] > J.fim || c[1] === 'qr') return;
       const k = chave(c[2] || 'Ilhabela Tour (site)', c[3] || '');
       const o = mapa[k] || (mapa[k] = { op:c[2] || 'Ilhabela Tour (site)', cat:c[3] || '', wa:0, ig:0 });
       o[c[1]]++;
@@ -418,6 +454,7 @@ tr.zero td.nome{font-weight:500}
       const d = somaDias(hoje, -i), u = Math.round(40 + 60 * rnd() + (89 - i) * 0.8);
       visitas.push([d, Math.round(u * 1.4), u, Math.round(u * 1.4 * 0.72), Math.round(u * 1.4 * 0.28)]);
       const nc = Math.round(u * 0.12 * rnd() + 2);
+      if (rnd() < 0.5) { const q = ['B1','B2','B3','J1','J2','J3'][Math.floor(rnd() * 6)]; cliques.push([d, 'qr', q, q[0] === 'J' ? 'Jeep' : 'Barco']); }
       for (let k = 0; k < nc; k++) { const o = nomes[Math.floor(Math.pow(rnd(), 2.2) * nomes.length)]; cliques.push([d, rnd() < 0.68 ? 'wa' : 'ig', o.op, o.cat]); }
     }
     return { ok:true, hoje, visitas, cliques };
