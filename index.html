@@ -2912,12 +2912,26 @@ try {
     scrollWheelZoom:false,
     maxBounds: ILHA_BOUNDS.pad(0.35),
     maxBoundsViscosity: 1.0,
-    minZoom: 11
+    minZoom: 10              // no celular a ilha inteira so cabe no zoom 10
   });
   // no celular o mapa comeca escondido (aba Passeios): sem tamanho, fitBounds quebra
   if (document.getElementById('map').clientWidth > 0) map.fitBounds(ILHA_BOUNDS, { padding:[8,8] });
   else map.setView(ILHA_BOUNDS.getCenter(), 11);
   L.Popup.prototype.options.autoPanPadding = L.point(28, 28);
+  if ('ResizeObserver' in window) {
+    let rq = 0, ult = '';
+    new ResizeObserver(() => {
+      cancelAnimationFrame(rq);
+      rq = requestAnimationFrame(() => {
+        const el = document.getElementById('map'); if (!el || !el.clientWidth || !el.clientHeight) return;
+        const k = el.clientWidth + 'x' + el.clientHeight; if (k === ult) return; ult = k;
+        map.invalidateSize({ pan: false });
+        // enquanto a pessoa nao mexeu no mapa, reenquadra a ilha inteira no novo tamanho
+        if (!window.__mapaMexeu && (typeof activeRegion === 'undefined' || activeRegion === 'all')) map.fitBounds(ILHA_BOUNDS, { padding:[8,8], animate:false });
+      });
+    }).observe(document.getElementById('map'));
+    ['touchstart', 'mousedown', 'wheel'].forEach(ev => document.getElementById('map').addEventListener(ev, () => { window.__mapaMexeu = true; }, { passive: true }));
+  }
   // Camada de mapa: tenta vários provedores, todos sem chave de API.
   // Se um falhar, passa ao seguinte; se todos falharem, avisa em vez de ficar em branco.
   const PROVEDORES = [
@@ -4659,10 +4673,14 @@ carregarPraias();
   function marcar(a){ botoes.forEach(b => b.classList.toggle('on', b.dataset.aba === a)); }
   function aoMostrarMapa(){
     if (typeof map === 'undefined' || !map) return;
-    setTimeout(() => {
+    // no iPhone a aba pode demorar a ganhar tamanho: tenta ate o mapa ter altura de verdade
+    let n = 0;
+    (function ajustar(){
+      const el = document.getElementById('map');
+      if (!el || el.clientWidth < 50 || el.clientHeight < 50) { if (++n < 40) setTimeout(ajustar, 50); return; }
       map.invalidateSize();
       if (!mapaPronto && typeof ILHA_BOUNDS !== 'undefined') { map.fitBounds(ILHA_BOUNDS, { padding:[8,8] }); mapaPronto = true; }
-    }, 60);
+    })();
   }
   window.irAba = function(a, semRolar){
     if (!ABAS.includes(a)) a = 'inicio';
