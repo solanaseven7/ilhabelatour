@@ -5472,10 +5472,10 @@ const PRAIA_OPS = {};
 
 <!-- ===== Link próprio de cada operador (?op=slug) + botão Compartilhar no card ===== -->
 <style>
-.modal-share{position:absolute;top:15px;right:54px;z-index:3;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px 0 10px;border:1px solid #E6E0D3;border-radius:999px;background:#fff;color:#1B2A3A;font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
-.modal-share:hover{border-color:#1B2A3A}
-.modal-share svg{width:14px;height:14px}
-.modal-share.ok{background:#1B2A3A;border-color:#1B2A3A;color:#fff}
+.modal-regioes .modal-share{display:inline-flex;align-items:center;gap:6px;color:#1B2A3A}
+.modal-regioes .modal-share svg{width:13px;height:13px;flex:none}
+.modal-regioes .modal-share:hover{border-color:#1B2A3A}
+.modal-regioes .modal-share.ok{background:#1B2A3A;border-color:#1B2A3A;color:#fff}
 #card-modal.praia .modal-share{display:none!important}
 </style>
 <script>
@@ -5493,7 +5493,7 @@ const PRAIA_OPS = {};
 
   // botão Compartilhar no card aberto
   const modal = document.querySelector('#card-modal .modal');
-  modal.insertAdjacentHTML('afterbegin', '<button type="button" class="modal-share" id="modal-share" aria-label="Compartilhar este operador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg><span>Compartilhar</span></button>');
+  modal.insertAdjacentHTML('afterbegin', '<button type="button" class="reg-chip modal-share" id="modal-share" aria-label="Compartilhar este operador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg><span>Compartilhar</span></button>');
   const btn = document.getElementById('modal-share');
   btn.addEventListener('click', async () => {
     const row = window.__itCard; if (!row) return;
@@ -5512,6 +5512,8 @@ const PRAIA_OPS = {};
   const abrirOrig = abrirCard;
   abrirCard = function(el, modo){
     const r = abrirOrig.apply(this, arguments);
+    const rb = document.getElementById('modal-regioes');
+    if (rb && el && el.classList && el.classList.contains('card-row')) { rb.appendChild(btn); rb.style.display = ''; }
     if (modo !== 'preview' && el && el.classList && el.classList.contains('card-row')) {
       try { history.replaceState(null, '', location.pathname + '?op=' + slugDe(el) + location.hash); } catch (_) {}
     }
