@@ -4951,6 +4951,8 @@ carregarPraias();
     if(!cr||!cl||!lw||!mh) return;
     cr.style.marginTop='';
     const a=cl.getBoundingClientRect(),b=cr.getBoundingClientRect();
+    if(document.documentElement.classList.contains('abas')) return;   // celular em abas: nunca mexe no mapa
+    if(!a.width||!b.width||!lw.offsetParent) return;                    // alguma coluna escondida
     if(a.right>b.left+1) return; // colunas empilhadas (celular)
     const dif=lw.getBoundingClientRect().top-mh.getBoundingClientRect().top;
     if(Math.abs(dif)>1) cr.style.marginTop=(parseFloat(getComputedStyle(cr).marginTop)+dif)+'px';
