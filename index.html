@@ -1019,7 +1019,7 @@ html.abas[data-aba="sobre"] #sobre{padding-top:24px}
   .pc-reg i{width:8px;height:8px;border-radius:50%;display:inline-block}
   .pc-pos{font-size:11px;color:#a8a8a2;text-align:center;margin-top:2px}
 }
-html.abas[data-aba="mapa"] #map{height:max(260px,calc(100vh - 400px));height:max(260px,calc(100dvh - 400px));min-height:260px}
+html.abas[data-aba="mapa"] #map{height:max(280px,calc(100vh - 336px));height:max(280px,calc(100dvh - 336px));min-height:280px}
 html.abas[data-aba="mapa"] .map-legend{display:none}
 html.abas[data-aba="mapa"] #mapa{padding-top:12px}
 html.abas[data-aba="mapa"] .aba-sub{margin-bottom:10px}
@@ -2912,7 +2912,8 @@ try {
     scrollWheelZoom:false,
     maxBounds: ILHA_BOUNDS.pad(0.35),
     maxBoundsViscosity: 1.0,
-    minZoom: 10              // no celular a ilha inteira so cabe no zoom 10
+    minZoom: 10,             // no celular a ilha inteira so cabe no zoom 10
+    zoomSnap: 0.25           // enquadramento mais justo: a ilha ocupa mais do mapa
   });
   // no celular o mapa comeca escondido (aba Passeios): sem tamanho, fitBounds quebra
   if (document.getElementById('map').clientWidth > 0) map.fitBounds(ILHA_BOUNDS, { padding:[8,8] });
