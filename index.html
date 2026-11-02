@@ -5472,12 +5472,10 @@ const PRAIA_OPS = {};
 
 <!-- ===== Link próprio de cada operador (?op=slug) + botão Compartilhar no card ===== -->
 <style>
-.modal-actions .modal-share{flex:0 0 48px;width:48px;padding:0;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid #E6E0D3;border-radius:10px;background:#fff;color:#1B2A3A;cursor:pointer;position:relative;transition:border-color .15s,background .15s,color .15s}
-.modal-actions .modal-share:hover{border-color:#1B2A3A}
-.modal-actions .modal-share svg{width:18px;height:18px}
-.modal-actions .modal-share span{position:absolute;bottom:calc(100% + 8px);left:0;white-space:nowrap;background:#1B2A3A;color:#fff;font:600 12px 'DM Sans',sans-serif;padding:6px 10px;border-radius:8px;opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .15s,transform .15s}
-.modal-actions .modal-share:hover span,.modal-actions .modal-share.ok span{opacity:1;transform:none}
-.modal-actions .modal-share.ok{background:#1B2A3A;border-color:#1B2A3A;color:#fff}
+.modal-share{position:absolute;top:15px;right:54px;z-index:3;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px 0 10px;border:1px solid #E6E0D3;border-radius:999px;background:#fff;color:#1B2A3A;font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.modal-share:hover{border-color:#1B2A3A}
+.modal-share svg{width:14px;height:14px}
+.modal-share.ok{background:#1B2A3A;border-color:#1B2A3A;color:#fff}
 #card-modal.praia .modal-share{display:none!important}
 </style>
 <script>
@@ -5495,7 +5493,7 @@ const PRAIA_OPS = {};
 
   // botão Compartilhar no card aberto
   const modal = document.querySelector('#card-modal .modal');
-  modal.querySelector('.modal-actions').insertAdjacentHTML('afterbegin', '<button type="button" class="modal-share" id="modal-share" aria-label="Compartilhar este operador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg><span>Compartilhar</span></button>');
+  modal.insertAdjacentHTML('afterbegin', '<button type="button" class="modal-share" id="modal-share" aria-label="Compartilhar este operador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg><span>Compartilhar</span></button>');
   const btn = document.getElementById('modal-share');
   btn.addEventListener('click', async () => {
     const row = window.__itCard; if (!row) return;
