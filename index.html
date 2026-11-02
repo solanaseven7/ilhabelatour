@@ -5049,6 +5049,23 @@ html.abas[data-aba="mapa"] #praias-sx{display:none}
 #card-modal.praia .modal.split .modal-col-sobre{height:auto}
 #card-modal.praia .modal.split .modal-col-sobre .modal-bio{overflow:visible;flex:none;margin-bottom:4px}
 #card-modal.praia .modal.split .modal-split-row>:first-child{overflow:visible}
+/* praia: foto na horizontal em cima e informações embaixo, em todas as telas */
+#card-modal.praia .modal.split .modal-split-row{display:flex!important;flex-direction:column;gap:14px;height:auto!important;min-height:0;margin:0}
+#card-modal.praia .modal.split .modal-col-fotos{order:-1;position:relative;height:auto!important;margin:0!important;flex:none}
+#card-modal.praia .modal.split .modal-col-fotos{min-height:0!important;max-height:none!important;aspect-ratio:auto!important}
+#card-modal.praia .modal.split .modal-col-sobre .modal-section-label{margin-top:4px}
+#card-modal.praia .modal-col-fotos .modal-section-label{display:none!important}
+#card-modal.praia .modal.split .modal-gallery{position:static!important;display:block!important;width:100%;height:auto!important;aspect-ratio:16/8.5;margin:0;border-radius:16px;overflow:hidden}
+#card-modal.praia .modal.split .modal-gallery .gimg{width:100%;height:100%!important;aspect-ratio:auto!important;border-radius:16px}
+#card-modal.praia .modal.split .modal-col-sobre{height:auto!important}
+#card-modal.praia .modal.split .modal-col-sobre .modal-regioes{margin-top:10px;padding-top:0}
+#card-modal.praia .modal .modal-body{overflow-y:auto}
+#card-modal.praia .modal-stage .modal,#card-modal.praia .modal{height:auto!important;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px)}
+#card-modal.praia .modal.split .modal-head{margin-bottom:14px}
+@media(min-width:641px){
+  #card-modal.praia .modal.split .modal-gallery{aspect-ratio:16/7}
+  #card-modal.praia .modal-body{padding-top:22px}
+}
 #card-modal.praia .pr-ops{flex-basis:100%;margin-top:4px}
 .pr-filtro{display:inline-flex;align-items:center;gap:6px;border:0;background:#14304D;color:#fff;border-radius:999px;padding:6px 12px;font:600 12.5px 'DM Sans',sans-serif;cursor:pointer;margin-left:8px}
 .pr-filtro span{opacity:.75;font-size:11px}
