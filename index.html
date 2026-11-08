@@ -4670,6 +4670,14 @@ carregarPraias();
   document.getElementById('rv-pular').addEventListener('click', () => enviar(PADRAO));
   document.getElementById('rv-fechar').addEventListener('click', fechar);
   ov.addEventListener('click', e => { if (e.target === ov) fechar(); });
+  // computador (formulário ao lado do card): clicar fora dele fecha só o formulário e volta ao card
+  document.addEventListener('click', e => {
+    if (!(stage && stage.classList.contains('com-rv'))) return;
+    const t = e.target;
+    if (!t || !t.closest || f.contains(t) || t.closest('.modal-rail')) return;
+    e.preventDefault(); e.stopPropagation();
+    fechar();
+  }, true);
 
   // intercepta os botoes de WhatsApp da lista e do card aberto
   document.addEventListener('click', function(e){
