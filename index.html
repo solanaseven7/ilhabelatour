@@ -5746,5 +5746,39 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
   document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
 })();
 </script>
+
+<!-- ===== Reserva no celular: o formulário sobe junto com o teclado ===== -->
+<style>
+@media(max-width:900px){
+  .rv-overlay{bottom:auto;height:var(--rv-vh,100%);transition:opacity .2s,visibility .2s,height .18s ease}
+  .rv-box{max-height:calc(var(--rv-vh,100vh) - 12px);overscroll-behavior:contain;scroll-padding:24px 0 96px}
+  .rv-overlay.teclado .rv-box{border-radius:18px 18px 0 0;padding-bottom:14px}
+  .rv-overlay.teclado .rv-sub{display:none}
+}
+</style>
+<script>
+(function(){
+  const ov = document.getElementById('rv-overlay'), box = document.getElementById('rv-form'), vv = window.visualViewport;
+  if (!ov || !box || !vv) return;
+  const mob = window.matchMedia('(max-width: 900px)');
+  function ajustar(){
+    if (!mob.matches || !ov.classList.contains('open')) { ov.style.removeProperty('--rv-vh'); ov.style.top = ''; ov.classList.remove('teclado'); return; }
+    ov.style.setProperty('--rv-vh', vv.height + 'px');
+    ov.style.top = vv.offsetTop + 'px';
+    ov.classList.toggle('teclado', window.innerHeight - vv.height > 120);
+  }
+  function mostrarCampo(el){
+    if (!el || !mob.matches || !box.contains(el)) return;
+    setTimeout(() => {
+      const b = box.getBoundingClientRect(), r = el.getBoundingClientRect();
+      if (r.top < b.top + 12 || r.bottom > b.bottom - 12) box.scrollTop += r.top - b.top - (b.height - r.height) / 3;
+    }, 260);
+  }
+  vv.addEventListener('resize', () => { ajustar(); mostrarCampo(document.activeElement); });
+  vv.addEventListener('scroll', ajustar);
+  box.addEventListener('focusin', e => { ajustar(); mostrarCampo(e.target); });
+  new MutationObserver(ajustar).observe(ov, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>
 </body>
 </html>
