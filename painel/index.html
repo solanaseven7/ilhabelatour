@@ -17,6 +17,9 @@
   --s-visitas:#1C6695;   /* serie unica: visitantes */
   --s-wa:#1baf7a;        /* WhatsApp */
   --s-ig:#c13584;        /* Instagram */
+  --s-qr:#E07A5F;        /* QR Code */
+  --s-barco:#1C6695;
+  --s-jeep:#E9AA41;
   --erro:#B42318;
 }
 *{box-sizing:border-box}
@@ -153,6 +156,10 @@ tr.zero td.nome{font-weight:500}
         <img src="../img/site/00b34d4f16.png" alt=""/>
         <div><h1>Painel</h1><small>ilhabelatour.com</small></div>
       </div>
+      <div class="periodos vistas" id="vistas" role="tablist" aria-label="Categoria">
+        <button data-v="site" class="on">Site</button>
+        <button data-v="qr">QR Code</button>
+      </div>
       <div class="periodos" id="periodos" role="tablist" aria-label="Período">
         <button data-d="1">Hoje</button>
         <button data-d="7">7 dias</button>
@@ -171,6 +178,7 @@ tr.zero td.nome{font-weight:500}
     <div class="demo oculto" id="faixa-demo">Dados de exemplo — o painel ainda não está ligado à planilha.</div>
     <p class="atualizado" id="atualizado"></p>
 
+    <div id="vista-site">
     <section class="kpis">
       <div class="kpi"><div class="rot"><i style="background:var(--s-visitas)"></i>Visitantes</div><div class="val" id="k-vis">–</div><div class="det" id="k-vis-d"></div></div>
       <div class="kpi"><div class="rot"><i style="background:var(--s-wa)"></i>Cliques WhatsApp</div><div class="val" id="k-wa">–</div><div class="det" id="k-wa-d"></div></div>
@@ -191,21 +199,6 @@ tr.zero td.nome{font-weight:500}
       </div>
     </section>
 
-    <section class="cartao" style="margin-bottom:16px">
-      <div class="cartao-top"><h2>Escaneamentos de QR Code (flyers)</h2></div>
-      <div class="tabela-wrap">
-        <table>
-          <thead><tr>
-            <th>QR</th>
-            <th>Modelo</th>
-            <th class="num">Escaneamentos</th>
-            <th class="barra"></th>
-          </tr></thead>
-          <tbody id="corpo-qr"></tbody>
-        </table>
-      </div>
-      <p class="rodape-tab" id="rodape-qr"></p>
-    </section>
 
     <section class="cartao">
       <div class="rank-top">
@@ -233,6 +226,38 @@ tr.zero td.nome{font-weight:500}
       </div>
       <p class="rodape-tab" id="rodape-rank"></p>
     </section>
+    </div>
+
+    <div id="vista-qr" class="oculto">
+    <section class="kpis">
+      <div class="kpi"><div class="rot"><i style="background:var(--s-qr)"></i>Escaneamentos</div><div class="val" id="q-tot">–</div><div class="det" id="q-tot-d"></div></div>
+      <div class="kpi"><div class="rot"><i style="background:var(--s-barco)"></i>Flyers de barco</div><div class="val" id="q-b">–</div><div class="det" id="q-b-d"></div></div>
+      <div class="kpi"><div class="rot"><i style="background:var(--s-jeep)"></i>Flyers de jeep</div><div class="val" id="q-j">–</div><div class="det" id="q-j-d"></div></div>
+      <div class="kpi"><div class="rot">QR Code mais lido</div><div class="val" id="q-top">–</div><div class="det" id="q-top-d"></div></div>
+    </section>
+    <section class="cartao" style="margin-bottom:16px">
+      <div class="cartao-top"><h2>Escaneamentos por dia</h2>
+        <div class="legenda"><span><i style="background:var(--s-barco)"></i>Barco</span><span><i style="background:var(--s-jeep)"></i>Jeep</span></div>
+      </div>
+      <div class="grafico" id="g-qr"></div>
+    </section>
+    <section class="cartao">
+      <div class="cartao-top"><h2>Escaneamentos por QR Code</h2></div>
+      <div class="tabela-wrap">
+        <table>
+          <thead><tr>
+            <th>QR Code</th>
+            <th>Modelo</th>
+            <th class="num">Escaneamentos</th>
+            <th class="num">% do total</th>
+            <th class="barra"></th>
+          </tr></thead>
+          <tbody id="corpo-qr"></tbody>
+        </table>
+      </div>
+      <p class="rodape-tab" id="rodape-qr"></p>
+    </section>
+    </div>
   </main>
 </div>
 
@@ -280,6 +305,8 @@ tr.zero td.nome{font-weight:500}
   $('sair').onclick = () => { esquecer(); DADOS = null; $('p').value = ''; mostrar('login'); };
   $('atualizar').onclick = async () => { const c = lido(); if (DEMO) { desenhar(); return; } if (c) { $('atualizar').textContent = 'Atualizando…'; await entrar(c, true); $('atualizar').textContent = 'Atualizar'; } };
   $('periodos').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; dias = +b.dataset.d; [...$('periodos').children].forEach(x => x.classList.toggle('on', x === b)); desenhar(); });
+  let vista = 'site';
+  $('vistas').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; vista = b.dataset.v; [...$('vistas').children].forEach(x => x.classList.toggle('on', x === b)); $('vista-site').classList.toggle('oculto', vista !== 'site'); $('vista-qr').classList.toggle('oculto', vista !== 'qr'); desenhar(); });
   $('abas-cat').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cat = b.dataset.c; [...$('abas-cat').children].forEach(x => x.classList.toggle('on', x === b)); desenharRanking(); });
   $('busca').addEventListener('input', e => { busca = e.target.value.trim().toLowerCase(); desenharRanking(); });
   document.querySelectorAll('th.ord').forEach(th => th.onclick = () => { ordem = th.dataset.o; desenharRanking(); });
@@ -341,19 +368,33 @@ tr.zero td.nome{font-weight:500}
   function desenharQR(){
     const J = janela();
     const cont = {}; ['B1','B2','B3','J1','J2','J3'].forEach(k => cont[k] = 0);
+    const porDia = {};
     DADOS.cliques.forEach(c => {
       if (c[1] !== 'qr' || c[0] < J.ini || c[0] > J.fim) return;
       const k = String(c[2] || '').toUpperCase(); cont[k] = (cont[k] || 0) + 1;
+      const o = porDia[c[0]] || (porDia[c[0]] = { b:0, j:0 }); o[k[0] === 'J' ? 'j' : 'b']++;
     });
     const ks = Object.keys(cont).sort(), max = Math.max(1, ...ks.map(k => cont[k]));
     const tot = ks.reduce((s, k) => s + cont[k], 0);
+    const nB = ks.filter(k => k[0] !== 'J').reduce((s, k) => s + cont[k], 0), nJ = tot - nB;
+    const pct = n => tot ? Math.round(n / tot * 100) + '%' : '0%';
+    const top = ks.slice().sort((a, b) => cont[b] - cont[a])[0];
+    $('q-tot').textContent = fmt(tot); $('q-tot-d').textContent = '1 por visitante, por QR Code';
+    $('q-b').textContent = fmt(nB); $('q-b-d').textContent = pct(nB) + ' do total';
+    $('q-j').textContent = fmt(nJ); $('q-j-d').textContent = pct(nJ) + ' do total';
+    $('q-top').textContent = tot ? top : '–'; $('q-top-d').textContent = tot ? fmt(cont[top]) + ' escaneamentos' : 'sem leituras no período';
+    if (vista === 'qr') barras($('g-qr'), J.lista, [
+      { k:'b', nome:'Barco', cor:'var(--s-barco)', val:d => (porDia[d] || {}).b || 0 },
+      { k:'j', nome:'Jeep', cor:'var(--s-jeep)', val:d => (porDia[d] || {}).j || 0 }
+    ]);
     $('corpo-qr').innerHTML = ks.map(k => '<tr class="' + (cont[k] ? '' : 'zero') + '">'
       + '<td class="nome">' + k.replace(/[^A-Z0-9]/g, '') + '</td>'
       + '<td><span class="tag">' + (k[0] === 'J' ? 'Jeep' : 'Barco') + '</span></td>'
       + '<td class="num"><b>' + fmt(cont[k]) + '</b></td>'
-      + '<td class="barra"><div class="bar">' + (cont[k] ? '<span style="width:' + (cont[k] / max * 100) + '%;background:var(--s-visitas)"></span>' : '') + '</div></td>'
+      + '<td class="num">' + pct(cont[k]) + '</td>'
+      + '<td class="barra"><div class="bar">' + (cont[k] ? '<span style="width:' + (cont[k] / max * 100) + '%;background:' + (k[0] === 'J' ? 'var(--s-jeep)' : 'var(--s-barco)') + '"></span>' : '') + '</div></td>'
       + '</tr>').join('');
-    $('rodape-qr').textContent = fmt(tot) + ' escaneamentos no período (1 por visitante, por QR).';
+    $('rodape-qr').textContent = fmt(tot) + ' escaneamentos no período. Cada QR Code conta 1 vez por visitante.';
   }
 
   function escalaMax(m){ if (m <= 4) return 4; const p = Math.pow(10, Math.floor(Math.log10(m))); for (const f of [1,2,2.5,5,10]) if (f * p >= m) return f * p; return 10 * p; }
