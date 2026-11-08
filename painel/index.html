@@ -229,15 +229,19 @@ tr.zero td.nome{font-weight:500}
     </div>
 
     <div id="vista-qr" class="oculto">
+    <div class="abas" id="abas-qr" style="display:inline-flex;margin-bottom:12px">
+      <button data-g="flyers" class="on">Flyers</button>
+      <button data-g="stickers">Stickers</button>
+    </div>
     <section class="kpis">
       <div class="kpi"><div class="rot"><i style="background:var(--s-qr)"></i>Escaneamentos</div><div class="val" id="q-tot">–</div><div class="det" id="q-tot-d"></div></div>
-      <div class="kpi"><div class="rot"><i style="background:var(--s-barco)"></i>Flyers de barco</div><div class="val" id="q-b">–</div><div class="det" id="q-b-d"></div></div>
-      <div class="kpi"><div class="rot"><i style="background:var(--s-jeep)"></i>Flyers de jeep</div><div class="val" id="q-j">–</div><div class="det" id="q-j-d"></div></div>
+      <div class="kpi"><div class="rot" id="q-b-rot"><i style="background:var(--s-barco)"></i>Flyers de barco</div><div class="val" id="q-b">–</div><div class="det" id="q-b-d"></div></div>
+      <div class="kpi"><div class="rot" id="q-j-rot"><i style="background:var(--s-jeep)"></i>Flyers de jeep</div><div class="val" id="q-j">–</div><div class="det" id="q-j-d"></div></div>
       <div class="kpi"><div class="rot">QR Code mais lido</div><div class="val" id="q-top">–</div><div class="det" id="q-top-d"></div></div>
     </section>
     <section class="cartao" style="margin-bottom:16px">
       <div class="cartao-top"><h2>Escaneamentos por dia</h2>
-        <div class="legenda"><span><i style="background:var(--s-barco)"></i>Barco</span><span><i style="background:var(--s-jeep)"></i>Jeep</span></div>
+        <div class="legenda" id="leg-qr"><span><i style="background:var(--s-barco)"></i>Barco</span><span><i style="background:var(--s-jeep)"></i>Jeep</span></div>
       </div>
       <div class="grafico" id="g-qr"></div>
     </section>
@@ -307,6 +311,8 @@ tr.zero td.nome{font-weight:500}
   $('periodos').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; dias = +b.dataset.d; [...$('periodos').children].forEach(x => x.classList.toggle('on', x === b)); desenhar(); });
   let vista = 'site';
   $('vistas').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; vista = b.dataset.v; [...$('vistas').children].forEach(x => x.classList.toggle('on', x === b)); $('vista-site').classList.toggle('oculto', vista !== 'site'); $('vista-qr').classList.toggle('oculto', vista !== 'qr'); desenhar(); });
+  let grupoQR = 'flyers';
+  $('abas-qr').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; grupoQR = b.dataset.g; [...$('abas-qr').children].forEach(x => x.classList.toggle('on', x === b)); desenharQR(); });
   $('abas-cat').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cat = b.dataset.c; [...$('abas-cat').children].forEach(x => x.classList.toggle('on', x === b)); desenharRanking(); });
   $('busca').addEventListener('input', e => { busca = e.target.value.trim().toLowerCase(); desenharRanking(); });
   document.querySelectorAll('th.ord').forEach(th => th.onclick = () => { ordem = th.dataset.o; desenharRanking(); });
@@ -364,37 +370,50 @@ tr.zero td.nome{font-weight:500}
     desenharQR();
   }
 
-  // escaneamentos dos QR Codes dos flyers (eventos t:'qr', op = B1..J3)
+  // escaneamentos dos QR Codes (eventos t:'qr'; flyers B1..J3, stickers S1..S3)
   function desenharQR(){
     const J = janela();
-    const cont = {}; ['B1','B2','B3','J1','J2','J3'].forEach(k => cont[k] = 0);
+    const ST = grupoQR === 'stickers';
+    const lista = ST ? ['S1','S2','S3'] : ['B1','B2','B3','J1','J2','J3'];
+    const doGrupo = k => ST ? k[0] === 'S' : (k[0] === 'B' || k[0] === 'J');
+    const cont = {}; lista.forEach(k => cont[k] = 0);
     const porDia = {};
     DADOS.cliques.forEach(c => {
       if (c[1] !== 'qr' || c[0] < J.ini || c[0] > J.fim) return;
-      const k = String(c[2] || '').toUpperCase(); cont[k] = (cont[k] || 0) + 1;
-      const o = porDia[c[0]] || (porDia[c[0]] = { b:0, j:0 }); o[k[0] === 'J' ? 'j' : 'b']++;
+      const k = String(c[2] || '').toUpperCase(); if (!doGrupo(k)) return;
+      cont[k] = (cont[k] || 0) + 1;
+      const o = porDia[c[0]] || (porDia[c[0]] = { b:0, j:0, s:0 }); o[k[0] === 'J' ? 'j' : (k[0] === 'S' ? 's' : 'b')]++;
     });
     const ks = Object.keys(cont).sort(), max = Math.max(1, ...ks.map(k => cont[k]));
     const tot = ks.reduce((s, k) => s + cont[k], 0);
-    const nB = ks.filter(k => k[0] !== 'J').reduce((s, k) => s + cont[k], 0), nJ = tot - nB;
     const pct = n => tot ? Math.round(n / tot * 100) + '%' : '0%';
     const top = ks.slice().sort((a, b) => cont[b] - cont[a])[0];
+    const modelo = k => k[0] === 'J' ? 'Jeep' : (k[0] === 'S' ? 'Sticker' : 'Barco');
+    const cor = k => k[0] === 'J' ? 'var(--s-jeep)' : (k[0] === 'S' ? 'var(--s-qr)' : 'var(--s-barco)');
     $('q-tot').textContent = fmt(tot); $('q-tot-d').textContent = '1 por visitante, por QR Code';
-    $('q-b').textContent = fmt(nB); $('q-b-d').textContent = pct(nB) + ' do total';
-    $('q-j').textContent = fmt(nJ); $('q-j-d').textContent = pct(nJ) + ' do total';
+    if (ST) {
+      $('q-b-rot').innerHTML = '<i style="background:var(--s-qr)"></i>Sticker S1'; $('q-b').textContent = fmt(cont.S1); $('q-b-d').textContent = pct(cont.S1) + ' do total';
+      $('q-j-rot').innerHTML = '<i style="background:var(--s-qr)"></i>Stickers S2 + S3'; $('q-j').textContent = fmt(cont.S2 + cont.S3); $('q-j-d').textContent = 'S2: ' + fmt(cont.S2) + ' · S3: ' + fmt(cont.S3);
+      $('leg-qr').innerHTML = '<span><i style="background:var(--s-qr)"></i>Stickers</span>';
+    } else {
+      const nB = ks.filter(k => k[0] === 'B').reduce((s, k) => s + cont[k], 0), nJ = tot - nB;
+      $('q-b-rot').innerHTML = '<i style="background:var(--s-barco)"></i>Flyers de barco'; $('q-b').textContent = fmt(nB); $('q-b-d').textContent = pct(nB) + ' do total';
+      $('q-j-rot').innerHTML = '<i style="background:var(--s-jeep)"></i>Flyers de jeep'; $('q-j').textContent = fmt(nJ); $('q-j-d').textContent = pct(nJ) + ' do total';
+      $('leg-qr').innerHTML = '<span><i style="background:var(--s-barco)"></i>Barco</span><span><i style="background:var(--s-jeep)"></i>Jeep</span>';
+    }
     $('q-top').textContent = tot ? top : '–'; $('q-top-d').textContent = tot ? fmt(cont[top]) + ' escaneamentos' : 'sem leituras no período';
-    if (vista === 'qr') barras($('g-qr'), J.lista, [
-      { k:'b', nome:'Barco', cor:'var(--s-barco)', val:d => (porDia[d] || {}).b || 0 },
-      { k:'j', nome:'Jeep', cor:'var(--s-jeep)', val:d => (porDia[d] || {}).j || 0 }
-    ]);
+    if (vista === 'qr') barras($('g-qr'), J.lista, ST
+      ? [{ k:'s', nome:'Stickers', cor:'var(--s-qr)', val:d => (porDia[d] || {}).s || 0 }]
+      : [{ k:'b', nome:'Barco', cor:'var(--s-barco)', val:d => (porDia[d] || {}).b || 0 },
+         { k:'j', nome:'Jeep', cor:'var(--s-jeep)', val:d => (porDia[d] || {}).j || 0 }]);
     $('corpo-qr').innerHTML = ks.map(k => '<tr class="' + (cont[k] ? '' : 'zero') + '">'
       + '<td class="nome">' + k.replace(/[^A-Z0-9]/g, '') + '</td>'
-      + '<td><span class="tag">' + (k[0] === 'J' ? 'Jeep' : 'Barco') + '</span></td>'
+      + '<td><span class="tag">' + modelo(k) + '</span></td>'
       + '<td class="num"><b>' + fmt(cont[k]) + '</b></td>'
       + '<td class="num">' + pct(cont[k]) + '</td>'
-      + '<td class="barra"><div class="bar">' + (cont[k] ? '<span style="width:' + (cont[k] / max * 100) + '%;background:' + (k[0] === 'J' ? 'var(--s-jeep)' : 'var(--s-barco)') + '"></span>' : '') + '</div></td>'
+      + '<td class="barra"><div class="bar">' + (cont[k] ? '<span style="width:' + (cont[k] / max * 100) + '%;background:' + cor(k) + '"></span>' : '') + '</div></td>'
       + '</tr>').join('');
-    $('rodape-qr').textContent = fmt(tot) + ' escaneamentos no período. Cada QR Code conta 1 vez por visitante.';
+    $('rodape-qr').textContent = fmt(tot) + ' escaneamentos no período (' + (ST ? 'stickers' : 'flyers') + '). Cada QR Code conta 1 vez por visitante.';
   }
 
   function escalaMax(m){ if (m <= 4) return 4; const p = Math.pow(10, Math.floor(Math.log10(m))); for (const f of [1,2,2.5,5,10]) if (f * p >= m) return f * p; return 10 * p; }
@@ -495,7 +514,7 @@ tr.zero td.nome{font-weight:500}
       const d = somaDias(hoje, -i), u = Math.round(40 + 60 * rnd() + (89 - i) * 0.8);
       visitas.push([d, Math.round(u * 1.4), u, Math.round(u * 1.4 * 0.72), Math.round(u * 1.4 * 0.28)]);
       const nc = Math.round(u * 0.12 * rnd() + 2);
-      if (rnd() < 0.5) { const q = ['B1','B2','B3','J1','J2','J3'][Math.floor(rnd() * 6)]; cliques.push([d, 'qr', q, q[0] === 'J' ? 'Jeep' : 'Barco']); }
+      if (rnd() < 0.5) { const q = ['B1','B2','B3','J1','J2','J3','S1','S2','S3'][Math.floor(rnd() * 9)]; cliques.push([d, 'qr', q, q[0] === 'J' ? 'Jeep' : (q[0] === 'S' ? 'Sticker' : 'Barco')]); }
       for (let k = 0; k < nc; k++) { const o = nomes[Math.floor(Math.pow(rnd(), 2.2) * nomes.length)]; cliques.push([d, rnd() < 0.68 ? 'wa' : 'ig', o.op, o.cat]); }
     }
     return { ok:true, hoje, visitas, cliques };
