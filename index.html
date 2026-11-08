@@ -5762,10 +5762,10 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
   if (!ov || !box || !vv) return;
   const mob = window.matchMedia('(max-width: 900px)');
   function ajustar(){
-    if (!mob.matches || !ov.classList.contains('open')) { ov.style.removeProperty('--rv-vh'); ov.style.top = ''; ov.classList.remove('teclado'); return; }
+    if (!mob.matches || !ov.classList.contains('open')) { ov.style.removeProperty('--rv-vh'); ov.style.top = ''; if (ov.classList.contains('teclado')) ov.classList.remove('teclado'); return; }
     ov.style.setProperty('--rv-vh', vv.height + 'px');
     ov.style.top = vv.offsetTop + 'px';
-    ov.classList.toggle('teclado', window.innerHeight - vv.height > 120);
+    const t = window.innerHeight - vv.height > 120; if (t !== ov.classList.contains('teclado')) ov.classList.toggle('teclado', t);
   }
   function mostrarCampo(el){
     if (!el || !mob.matches || !box.contains(el)) return;
