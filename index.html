@@ -5406,11 +5406,14 @@ const PRAIA_OPS = {};
       const p = ps.find(x => x.nome === b.dataset.nome);
       if (p) setTimeout(() => abrirPraia(p, visiveisMapa()), 60);
     });
-    const pc = $('pc-lista');   // celular: 1º toque seleciona, 2º toque no card ativo abre
+    const pc = $('pc-lista');   // celular: 1º toque já abre o card (e posiciona o mapa na praia por trás)
     if (pc) pc.addEventListener('click', e => {
-      const c = e.target.closest('.pc-card'); if (!c || !c.classList.contains('on')) return;
+      const c = e.target.closest('.pc-card'); if (!c) return;
       const p = ps.find(x => x.nome === (c.querySelector('.pc-nome') || {}).textContent);
-      if (p) { e.stopPropagation(); abrirPraia(p, visiveisMapa()); }
+      if (!p) return;
+      e.stopPropagation();
+      if (window.praiasSync) window.praiasSync.ir(p, true);
+      abrirPraia(p, visiveisMapa());
     }, true);
     return true;
   }
